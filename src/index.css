@@ -140,8 +140,8 @@
 
   .hero-overlay {
     background: 
-      radial-gradient(ellipse at center, transparent 0%, hsl(var(--hero) / 0.3) 70%, hsl(var(--hero) / 0.7) 100%),
-      linear-gradient(to right, hsl(var(--hero) / 0.95) 0%, hsl(var(--hero) / 0.8) 35%, hsl(var(--hero) / 0.5) 100%);
+      linear-gradient(to bottom, hsl(var(--hero) / 0.7) 0%, hsl(var(--hero) / 0.5) 50%, hsl(var(--hero) / 0.85) 100%),
+      linear-gradient(to right, hsl(var(--hero) / 0.8) 0%, hsl(var(--hero) / 0.4) 100%);
   }
 
   /* Quiz card - larger shadow for prominence */
@@ -212,7 +212,7 @@
 
   /* Hero text shadow for contrast */
   .hero-text-shadow {
-    text-shadow: 0 2px 8px hsl(0 0% 0% / 0.5), 0 4px 20px hsl(0 0% 0% / 0.3);
+    text-shadow: 0 2px 12px hsl(0 0% 0% / 0.7), 0 4px 24px hsl(0 0% 0% / 0.5);
   }
 }
 
