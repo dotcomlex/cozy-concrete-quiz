@@ -12,7 +12,7 @@ const HeroSection = () => {
       <div className="absolute inset-0">
         <img
           src={heroImage}
-          alt="Beautiful Colorado home with new concrete driveway and mountain backdrop"
+          alt="Beautiful Colorado home with modern kitchen remodel and mountain backdrop"
           className="w-full h-full object-cover"
           fetchPriority="high"
           loading="eager"
@@ -56,11 +56,11 @@ const HeroSection = () => {
               <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-extrabold text-white leading-tight hero-text-shadow">
                 Colorado homeowners can now get{" "}
                 <span className="text-highlight">$2,000 OFF</span>{" "}
-                any concrete project through our Winter Upgrade Program!
+                any remodeling project through our Winter Upgrade Program!
               </h1>
 
               <p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-lg leading-relaxed hero-text-shadow mb-4 sm:mb-5">
-                Trusted by Colorado homeowners for driveways, patios, walkways, and more. Book your FREE estimate and claim the <span className="font-semibold text-highlight">$2,000 OFF</span> offer today.
+                Trusted by Colorado homeowners for kitchens, bathrooms, basements, and more. Book your FREE in-home consultation and claim the <span className="font-semibold text-highlight">$2,000 OFF</span> offer today.
               </p>
               
               {/* Trust Strip - Single Line */}
