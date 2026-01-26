@@ -1,182 +1,144 @@
 
 
-# Remodeling Lead Gen Funnel Conversion Plan
+# Quiz Redesign Implementation Plan
 
 ## Overview
-Convert the existing concrete services landing page to a home remodeling lead generation funnel while preserving all design, functionality, and technical integrations. The core structure stays intact - we're updating content and adding a budget question to the quiz.
+Replace the current Quiz component with the new design that features simplified styling, progress dots instead of a progress bar, redesigned option cards with accent colors, and an updated budget step with 4 options instead of 5.
 
 ---
 
-## Phase 1: Quiz Component Updates
+## Key Design Changes
 
-### 1.1 Add Budget Question (New Step 3)
-- Add new `budgetRange` field to QuizData interface
-- Insert new step between Timeline (Step 2) and ZIP Code (moved to Step 4)
-- Budget options: Under $20k, $20k-50k, $50k-100k, $100k+, Not sure yet
-- Auto-advance on selection (same as Steps 1-2)
+### 1. Progress Indicator
+**Current:** Labeled progress bar with percentages
+**New:** Simple progress dots (5 dots representing each step)
 
-### 1.2 Update Project Types
-- Replace concrete options (Driveway, Patio, Walkway, Other) with remodeling options:
-  - Kitchen remodel (ChefHat icon)
-  - Bathroom remodel (Bath icon)
-  - Kitchen AND bathroom (Home icon)
-  - Other remodeling project (HelpCircle icon)
+### 2. Option Cards (OptionCard Component)
+**Current:** `OptionTile` with circular icon container and vertical layout
+**New:** `OptionCard` with larger icon circle, horizontal checkmark indicator when selected, and customizable `accentColor` prop
 
-### 1.3 Update Timeline Options
-- "Within 2 weeks (ASAP)" → Zap icon
-- "Within 30 days" → Calendar icon
-- "1-3 months" → CalendarClock icon
-- "Just exploring options" → Clock icon
+### 3. Budget Options
+**Current:** 5 options (Under $20k, $20-50k, $50-100k, $100k+, Not sure)
+**New:** 4 options with updated ranges:
+- Under $25,000
+- $25,000 - $50,000
+- $50,000+
+- Not sure yet
 
-### 1.4 Update Progress Bar
-- Expand from 4 steps to 5 steps: Project → Timeline → Budget → Location → Contact
-- Update progress percentages: 20%, 40%, 60%, 80%, 100%
+### 4. Card Animation Variants
+**Current:** `slideVariants` with x-axis slide (opacity + x: 15/-15)
+**New:** `cardVariants` with y-axis + scale animation (opacity + y: 20/-20 + scale: 0.95/1)
 
-### 1.5 Update Webhook Payload
-- Add `budget_range` field to payload
-- Update label mapping functions for new project types and timeline options
-- Maintain dual format (contact.* and plain keys) for GHL compatibility
+### 5. ZIP Code Input
+**Current:** Standard input with h-14 height
+**New:** Larger h-16 input with centered text and rounded-2xl styling
 
----
+### 6. Contact Form (Step 5) Enhancements
+- Add Sparkles icon import
+- Enhanced trust footer with Shield icon in a small circle
+- "Go back" text button instead of icon-only back button
+- Orange gradient submit button styling
 
-## Phase 2: Hero Section Content Updates
-
-### 2.1 Main Headline
-- "Colorado homeowners can now get **$2,000 OFF** any remodeling project through our Winter Upgrade Program!"
-
-### 2.2 Subheadline
-- Update to mention kitchens, bathrooms, basements instead of driveways/patios
-
-### 2.3 Keep Unchanged
-- Breaking badge, trust strip, urgency badge, Google rating badge
-- Same layout, styling, and animations
+### 7. Auto-advance Timing
+**Current:** 250ms delay
+**New:** 300ms delay
 
 ---
 
-## Phase 3: Reviews Section Updates
+## Brand Colors Reference
+The design will use existing brand colors from `src/index.css`:
 
-### 3.1 Replace All 12 Testimonials
-- Convert concrete project stories to remodeling stories (kitchen, bathroom, basement)
-- Update review text to mention:
-  - Custom cabinets, countertops, tile work, fixtures
-  - Basement finishing, spa-like bathrooms, dream kitchens
-- Keep same names, locations, and avatar assignments
-- Maintain carousel functionality and card design
+| Color Token | HSL Value | Usage |
+|-------------|-----------|-------|
+| `--primary` | 38 85% 50% (warm amber) | CTAs, selected states, accents |
+| `--foreground` | 220 20% 15% | Text |
+| `--muted-foreground` | 220 10% 45% | Secondary text |
+| `--border` | 220 13% 90% | Borders |
 
----
-
-## Phase 4: FAQ Section Updates
-
-### 4.1 Replace All 6 FAQs
-1. "What types of remodeling projects do you handle?"
-2. "What does the free in-home consultation include?"
-3. "Are you licensed and insured?"
-4. "How long does a typical remodeling project take?"
-5. "Do I need to move out during the remodel?"
-6. "What does the $2,000 Winter Upgrade Program discount apply to?"
+**Accent Colors for Option Cards:**
+- Kitchen: `text-orange-600` (orange-600)
+- Bathroom: `text-cyan-600` (cyan-600)
+- Both: `text-violet-600` (violet-600)
+- Other: `text-slate-600` (slate-600)
+- Timeline ASAP: `text-red-600`
+- Timeline 30 days: `text-orange-600`
+- Timeline 1-3 months: `text-teal-600`
+- Timeline exploring: `text-slate-500`
 
 ---
 
-## Phase 5: Services Section Updates
+## Implementation Details
 
-### 5.1 Update Service Cards
-- Kitchens (ChefHat) - "The heart of your home"
-- Bathrooms (Droplets) - "Your private retreat"
-- Basements (Home) - "Unlock hidden potential"
-- Home Additions (Maximize) - "Expand your space"
-- Custom Projects (Hammer) - "Your vision, our expertise"
+### File to Modify
+`src/components/Quiz.tsx`
 
-### 5.2 Note About Images
-- Keep existing placeholder images for now
-- You'll provide new remodeling images later
+### Changes Summary
 
----
+1. **Update imports** - Add `Sparkles` icon from lucide-react
 
-## Phase 6: Gallery Section Updates
+2. **Replace `OptionTile` with `OptionCard`** - New component with:
+   - Larger icon circle (w-14 h-14)
+   - Customizable accent color via `accentColor` prop
+   - Selection indicator with green checkmark circle
+   - Gradient background on selection
 
-### 6.1 Update Section Header
-- Change heading from "Real Colorado Results" to "Real Colorado Transformations"
-- Update subheading to mention kitchens, bathrooms, basements
+3. **Replace `BudgetTile` with `BudgetCard`** - New simpler text-only cards
 
-### 6.2 Note About Images
-- Keep existing gallery images for now
-- You'll provide new before/after remodeling images later
+4. **Update progress indicator** - Replace labeled progress bar with 5 simple dots
 
----
+5. **Update budget options** - Change from 5 options to 4:
+   - `under-25k` → "Under $25,000"
+   - `25k-50k` → "$25,000 - $50,000"
+   - `50k-plus` → "$50,000+"
+   - `not-sure` → "Not sure yet"
 
-## Phase 7: Supporting Sections Updates
+6. **Update `getBudgetLabel` function** - Match new budget option values
 
-### 7.1 Why Winter Section
-- Update 3 reasons for remodeling context:
-  - Save $2,000 → invest in premium finishes
-  - Ready for Spring → enjoy new kitchen/bathroom/basement
-  - Skip the Spring Rush → faster scheduling
+7. **Update animation variants** - Change from x-slide to y-slide with scale
 
-### 7.2 Final CTA Section
-- Update headline: "$2,000 Off Any Remodeling Project"
-- Update subheadline for kitchens, bathrooms, basements
+8. **Update auto-advance delay** - Change from 250ms to 300ms
 
-### 7.3 Process Section
-- Update step descriptions for remodeling:
-  - "remodeling project" instead of "concrete project"
-  - "remodeling expert" instead of "concrete expert"
-  - "demolition, construction, and finishing touches" instead of "tear-out, prep, pour, and finish"
+9. **Update ZIP input styling** - Larger input (h-16), centered text, rounded-2xl
 
-### 7.4 Why Choose Section
-- Minor wording updates for remodeling context
+10. **Update Contact Form (Step 5)**:
+    - Enhanced trust footer with Shield icon in circle
+    - "Go back" text link instead of icon button
+    - Adjusted button styling
 
-### 7.5 Floating CTA
-- Update button text: "Get My Free Consultation"
-
-### 7.6 Footer
-- Update to mention "kitchen, bathroom, and basement remodeling"
+11. **Update Step Labels in header** - Remove progress bar, keep "Winter Upgrade Program" badge
 
 ---
 
-## Phase 8: Meta Tags & SEO Updates
+## Component Structure Changes
 
-### 8.1 Update index.html
-- Title: "14er Renovation | $2,000 Off Home Remodeling | Colorado"
-- Meta description: Focus on kitchen, bathroom, basement remodeling
-- Keywords: Remodeling-specific terms
-- Open Graph tags: Updated for remodeling context
-- Twitter cards: Updated for remodeling context
+### New OptionCard Component
+```text
++----------------------------------+
+|  +--------+                      |
+|  | ICON   |    Label Text        |  <- Selected shows green checkmark
+|  +--------+                      |
++----------------------------------+
+```
 
----
+### New BudgetCard Component
+```text
++----------------------------------+
+|         $25,000 - $50,000        |  <- Simple text-only card
++----------------------------------+
+```
 
-## Technical Specifications
-
-### What Stays Unchanged
-- ✅ Overall page layout and structure
-- ✅ All CSS classes and animations
-- ✅ Webhook URL and integration pattern
-- ✅ Facebook Pixel implementation (same pixel ID)
-- ✅ Component architecture
-- ✅ Image placement and sizing
-- ✅ Section order and spacing
-
-### Quiz Flow Summary
-1. **Project Type** → Kitchen / Bathroom / Both / Other (auto-advance)
-2. **Timeline** → ASAP / 30 days / 1-3 months / Exploring (auto-advance)
-3. **Budget** → Under $20k / $20k-50k / $50k-100k / $100k+ / Not sure (auto-advance)
-4. **ZIP Code** → Manual entry with Continue button
-5. **Contact Form** → Name, Phone, Email (optional)
-6. **Success Screen** → Personalized thank you
+### New Progress Dots
+```text
+  ●  ●  ●  ○  ○   <- Filled dots = completed/current, empty = upcoming
+```
 
 ---
 
-## Files to Modify
-- `src/components/Quiz.tsx` - Quiz flow + budget question
-- `src/components/HeroSection.tsx` - Hero copy
-- `src/components/ReviewsSection.tsx` - All 12 testimonials
-- `src/components/FAQSection.tsx` - All 6 FAQs
-- `src/components/ServicesSection.tsx` - Service cards + icons
-- `src/components/GallerySection.tsx` - Section headers
-- `src/components/WhyWinterSection.tsx` - Reason cards
-- `src/components/FinalCTASection.tsx` - CTA copy
-- `src/components/ProcessSection.tsx` - Step descriptions
-- `src/components/WhyChooseSection.tsx` - Card descriptions
-- `src/components/FloatingCTA.tsx` - Button text
-- `src/components/Footer.tsx` - Footer text
-- `index.html` - Meta tags and SEO
+## Technical Notes
+
+- The webhook URL and payload structure remain unchanged
+- Facebook Pixel integration stays the same
+- All form validation logic is preserved
+- Auto-advance behavior continues (Steps 1-3 auto-advance, Step 4 requires button)
+- Mobile responsiveness maintained with existing sm: breakpoints
 
