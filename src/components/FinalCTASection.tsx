@@ -16,20 +16,20 @@ const FinalCTASection = () => {
 
         <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold mb-6 max-w-3xl mx-auto leading-tight">
           Winter Upgrade Program:{" "}
-          <span className="text-primary">$2,000 Off</span> Any Concrete Installation
+          <span className="text-primary">$2,000 Off</span> Any Remodeling Project
         </h2>
 
         <p className="text-base sm:text-lg lg:text-xl opacity-80 mb-8 max-w-2xl mx-auto">
-          Don't wait until spring. Get your driveway, patio, or walkway installed now and save.
+          Don't wait until spring. Transform your kitchen, bathroom, or basement now and save big.
         </p>
 
         <Button variant="cta" size="xl" onClick={scrollToTop} className="group">
-          Claim My Free Estimate
+          Claim My Free Consultation
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </Button>
 
         <p className="text-sm opacity-60 mt-6">
-          No obligations • Free on-site estimate • One-year warranty included
+          No obligations • Free in-home consultation • One-year warranty included
         </p>
       </div>
     </section>

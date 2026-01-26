@@ -5,17 +5,17 @@ const WhyChooseSection = () => {
     {
       icon: Shield,
       title: "Licensed & Insured",
-      description: "Your project is fully protected from start to finish.",
+      description: "Your remodeling project is fully protected from start to finish.",
     },
     {
       icon: DollarSign,
       title: "Transparent Pricing",
-      description: "Clear, upfront quotes with no hidden fees or surprises.",
+      description: "Clear, upfront quotes for your kitchen, bathroom, or basement with no hidden fees.",
     },
     {
       icon: MapPin,
       title: "Local Colorado Crew",
-      description: "A trusted team that treats your home like their own.",
+      description: "A trusted remodeling team that treats your home like their own.",
     },
   ];
 

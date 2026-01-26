@@ -5,17 +5,17 @@ const WhyWinterSection = () => {
     {
       icon: Sparkles,
       title: "Save $2,000 This Season",
-      description: "Take advantage of our Winter Upgrade Program and invest those savings into your home.",
+      description: "Take advantage of our Winter Upgrade Program and invest those savings into premium finishes and upgrades.",
     },
     {
       icon: Sun,
       title: "Ready for Spring",
-      description: "Enjoy your beautiful new driveway, patio, or walkway the moment warm weather arrives.",
+      description: "Enjoy your beautiful new kitchen, bathroom, or basement the moment warm weather arrives.",
     },
     {
       icon: Clock,
       title: "Skip the Spring Rush",
-      description: "Get started sooner with faster scheduling. Your project starts when it works for you.",
+      description: "Get started sooner with faster scheduling. Your project starts when it works for you, not when we have availability.",
     },
   ];
 
@@ -30,7 +30,7 @@ const WhyWinterSection = () => {
             Why Now Is the <span className="text-primary">Perfect Time</span>
           </h2>
           <p className="text-base sm:text-lg text-slate-300 mb-10 max-w-2xl mx-auto">
-            Don't wait until spring when schedules fill up. Get your project done now and be the envy of your neighborhood.
+            Don't wait until spring when schedules fill up. Get your remodeling project done now and enjoy your new space sooner.
           </p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">

@@ -7,34 +7,34 @@ import {
 
 const faqs = [
   {
-    question: "What types of concrete projects do you handle?",
+    question: "What types of remodeling projects do you handle?",
     answer:
-      "We handle a wide range of concrete projects, including residential and commercial work. This includes driveways, patios, walkways, foundations, slabs, and other concrete installations.",
+      "We specialize in kitchens, bathrooms, basements, home additions, and whole-home remodels. Whether it's a single room refresh or a complete transformation, we handle projects of all sizes.",
   },
   {
-    question: "What does the free estimate include?",
+    question: "What does the free in-home consultation include?",
     answer:
-      "Your free estimate includes an on-site walkthrough, measurements, project discussion, and clear upfront pricing. There's no obligation and no pressure.",
+      "Your free in-home consultation includes an on-site walkthrough, detailed project discussion, design recommendations, material options, and a clear upfront quote. There's no obligation and no pressure.",
   },
   {
     question: "Are you licensed and insured?",
     answer:
-      "Yes. We are fully licensed and insured, including liability and workers' compensation. This protects you, your property, and ensures the work meets local requirements.",
+      "Yes. We are fully licensed and insured, including liability and workers' compensation. This protects you, your property, and ensures all work meets local building codes and requirements.",
   },
   {
-    question: "Can concrete be installed during colder months?",
+    question: "How long does a typical remodeling project take?",
     answer:
-      "Yes. Concrete can be installed during colder weather when proper techniques are used. We follow proven methods to ensure durability and long-term performance.",
+      "Timelines vary based on project scope. Kitchen remodels typically take 4-8 weeks, bathrooms 2-4 weeks, and basements 6-10 weeks. We'll provide a detailed timeline during your consultation.",
   },
   {
-    question: "When can I schedule my project?",
+    question: "Do I need to move out during the remodel?",
     answer:
-      "Projects can be scheduled year-round, including winter, spring, and summer. In some cases, current promotions may still apply to future scheduled work.",
+      "Most homeowners stay in their homes during remodeling. We work to minimize disruption, maintain clean work areas, and coordinate schedules to keep your daily life as normal as possible.",
   },
   {
-    question: "How long does a typical concrete project take?",
+    question: "What does the $2,000 Winter Upgrade Program discount apply to?",
     answer:
-      "Project timelines vary based on size and scope, but many residential and commercial projects are completed within a few days. We'll review timing during your estimate.",
+      "The $2,000 discount applies to any remodeling project - kitchens, bathrooms, basements, or combinations. Projects must be scheduled by January 31st to qualify for this limited-time offer.",
   },
 ];
 

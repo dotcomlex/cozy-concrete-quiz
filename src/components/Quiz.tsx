@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  MapPin, Car, Trees, Footprints, HelpCircle, 
-  Zap, Calendar, CalendarClock, Clock,
+  MapPin, ChefHat, Bath, Home, HelpCircle, 
+  Zap, Calendar, CalendarClock, Clock, DollarSign,
   ArrowRight, ArrowLeft, CheckCircle2, Shield, Phone,
   User, Mail, Loader2, Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
 
-type QuizStep = 1 | 2 | 3 | 4;
+type QuizStep = 1 | 2 | 3 | 4 | 5;
 
 interface QuizData {
   projectType: string;
   timeline: string;
+  budgetRange: string;
   zipCode: string;
   firstName: string;
   phone: string;
@@ -37,6 +37,7 @@ const Quiz = () => {
   const [data, setData] = useState<QuizData>({
     projectType: "",
     timeline: "",
+    budgetRange: "",
     zipCode: "",
     firstName: "",
     phone: "",
@@ -44,11 +45,12 @@ const Quiz = () => {
   });
 
   const getProgressPercentage = () => {
-    if (step === 1) return 25;
-    if (step === 2) return 50;
-    if (step === 3) return 75;
-    if (step === 4) return 100;
-    return 25;
+    if (step === 1) return 20;
+    if (step === 2) return 40;
+    if (step === 3) return 60;
+    if (step === 4) return 80;
+    if (step === 5) return 100;
+    return 20;
   };
 
   // Auto-advance for tile selections
@@ -70,9 +72,16 @@ const Quiz = () => {
     }
   }, [data.timeline, step]);
 
+  // Auto-advance: Step 3 (Budget) → Step 4
+  useEffect(() => {
+    if (step === 3 && data.budgetRange) {
+      setTimeout(() => setStep(4), 250);
+    }
+  }, [data.budgetRange, step]);
+
   const handleNext = () => {
-    if (step === 3 && data.zipCode.length >= 5) {
-      setStep(4);
+    if (step === 4 && data.zipCode.length >= 5) {
+      setStep(5);
     }
   };
 
@@ -84,20 +93,31 @@ const Quiz = () => {
 
   const getProjectTypeLabel = (type: string): string => {
     switch (type) {
-      case "driveway": return "Driveway";
-      case "patio": return "Patio";
-      case "walkway": return "Walkway";
-      case "other": return "Other";
+      case "kitchen": return "Kitchen remodel";
+      case "bathroom": return "Bathroom remodel";
+      case "both": return "Kitchen AND bathroom";
+      case "other": return "Other remodeling project";
       default: return "";
     }
   };
 
   const getTimelineLabel = (timeline: string): string => {
     switch (timeline) {
-      case "asap": return "ASAP / Right away";
-      case "this-month": return "This month";
-      case "2-3-months": return "Within 2-3 months";
-      case "not-sure": return "Not sure";
+      case "asap": return "Within 2 weeks (ASAP)";
+      case "30-days": return "Within 30 days";
+      case "1-3-months": return "1-3 months";
+      case "exploring": return "Just exploring options";
+      default: return "";
+    }
+  };
+
+  const getBudgetLabel = (budget: string): string => {
+    switch (budget) {
+      case "under-20k": return "Under $20,000";
+      case "20k-50k": return "$20,000 - $50,000";
+      case "50k-100k": return "$50,000 - $100,000";
+      case "100k-plus": return "$100,000+";
+      case "not-sure": return "Not sure yet";
       default: return "";
     }
   };
@@ -128,27 +148,30 @@ const Quiz = () => {
 
     const phoneDigits = data.phone.replace(/\D/g, '');
 
-    // Build payload with exact GoHighLevel field keys + duplicates for resilience
+    // Build payload with BOTH contact.* format AND plain keys for maximum GHL compatibility
     const payload = {
       // GHL contact.* format (primary)
       "contact.first_name": data.firstName,
       "contact.email": data.email || "",
       "contact.phone": phoneDigits,
-      "contact.what_is_your_zip_code": data.zipCode,
-      "contact.what_type_of_project": getProjectTypeLabel(data.projectType),
-      "contact.when_do_you_want_to_start": getTimelineLabel(data.timeline),
-      // Plain keys (backup/duplicate)
+      "contact.zip_code": data.zipCode,
+      "contact.project_type": getProjectTypeLabel(data.projectType),
+      "contact.timeline": getTimelineLabel(data.timeline),
+      "contact.budget_range": getBudgetLabel(data.budgetRange),
+      // Plain keys (backup/duplicate for reliability)
       first_name: data.firstName,
       email: data.email || "",
       phone: phoneDigits,
       zip_code: data.zipCode,
       project_type: getProjectTypeLabel(data.projectType),
       timeline: getTimelineLabel(data.timeline),
+      budget_range: getBudgetLabel(data.budgetRange),
     };
 
-    console.log("Quiz payload prepared:", {
+    console.log("Remodeling Quiz payload prepared:", {
       projectType: payload.project_type,
       timeline: payload.timeline,
+      budgetRange: payload.budget_range,
       zip: payload.zip_code,
       name: payload.first_name,
     });
@@ -186,6 +209,7 @@ const Quiz = () => {
     setData({
       projectType: "",
       timeline: "",
+      budgetRange: "",
       zipCode: "",
       firstName: "",
       phone: "",
@@ -231,6 +255,34 @@ const Quiz = () => {
     </button>
   );
 
+  const BudgetTile = ({ 
+    label, 
+    selected, 
+    onClick 
+  }: { 
+    label: string; 
+    selected: boolean; 
+    onClick: () => void;
+  }) => (
+    <button
+      onClick={onClick}
+      className={`quiz-tile flex items-center justify-center gap-2 p-4 rounded-xl border-2 bg-white shadow-sm min-h-[60px] w-full transition-all duration-300 hover:scale-[1.02] hover:shadow-md active:scale-[0.98] group ${
+        selected 
+          ? "border-primary bg-gradient-to-b from-primary/10 to-primary/5 shadow-[0_0_25px_-5px_hsl(var(--primary)/0.5)]" 
+          : "border-slate-200 hover:border-primary/60"
+      }`}
+    >
+      <DollarSign className={`w-4 h-4 transition-colors duration-200 ${
+        selected ? "text-primary" : "text-muted-foreground"
+      }`} />
+      <span className={`text-sm sm:text-base font-medium text-center leading-tight transition-colors duration-200 ${
+        selected ? "text-primary font-semibold" : "text-foreground"
+      }`}>
+        {label}
+      </span>
+    </button>
+  );
+
   const slideVariants = {
     enter: { opacity: 0, x: 15 },
     center: { opacity: 1, x: 0 },
@@ -239,8 +291,8 @@ const Quiz = () => {
 
   return (
     <div className="quiz-card-glass rounded-2xl shadow-quiz-glow p-6 sm:p-8 w-full max-w-lg border-2 border-primary/30">
-      {/* Header with Program Branding - hide on Step 4 and Thank You */}
-      {step < 4 && !isSubmitted && (
+      {/* Header with Program Branding - hide on Step 5 and Thank You */}
+      {step < 5 && !isSubmitted && (
         <div className="text-center mb-7">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary/20 to-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-primary/20 mb-3">
             <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
@@ -250,14 +302,15 @@ const Quiz = () => {
         </div>
       )}
 
-      {/* Progress indicator with step labels - hide on Step 4 and Thank You */}
-      {!isSubmitted && step < 4 && (
+      {/* Progress indicator with step labels - hide on Step 5 and Thank You */}
+      {!isSubmitted && step < 5 && (
         <div className="mb-6">
           <div className="flex justify-between text-xs text-muted-foreground mb-2 px-1">
             <span className={step >= 1 ? "text-primary font-medium" : ""}>Project</span>
             <span className={step >= 2 ? "text-primary font-medium" : ""}>Timeline</span>
-            <span className={step >= 3 ? "text-primary font-medium" : ""}>Location</span>
-            <span className={step >= 4 ? "text-primary font-medium" : ""}>Contact</span>
+            <span className={step >= 3 ? "text-primary font-medium" : ""}>Budget</span>
+            <span className={step >= 4 ? "text-primary font-medium" : ""}>Location</span>
+            <span className={step >= 5 ? "text-primary font-medium" : ""}>Contact</span>
           </div>
           <div className="h-2.5 bg-slate-200 rounded-full overflow-hidden border border-slate-300">
             <div 
@@ -279,35 +332,35 @@ const Quiz = () => {
             exit="exit"
             transition={{ duration: 0.25 }}
           >
-            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-6 leading-snug">What type of concrete project do you need?</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-6 leading-snug">Which project are you planning?</h3>
             <div className="grid grid-cols-2 gap-4">
               <OptionTile
-                icon={Car}
-                label="Driveway"
-                selected={data.projectType === "driveway"}
-                onClick={() => handleTileSelect("projectType", "driveway")}
+                icon={ChefHat}
+                label="Kitchen remodel"
+                selected={data.projectType === "kitchen"}
+                onClick={() => handleTileSelect("projectType", "kitchen")}
                 iconBg="bg-slate-600/15"
                 iconColor="text-slate-600"
               />
               <OptionTile
-                icon={Trees}
-                label="Patio"
-                selected={data.projectType === "patio"}
-                onClick={() => handleTileSelect("projectType", "patio")}
+                icon={Bath}
+                label="Bathroom remodel"
+                selected={data.projectType === "bathroom"}
+                onClick={() => handleTileSelect("projectType", "bathroom")}
                 iconBg="bg-amber-500/15"
                 iconColor="text-amber-600"
               />
               <OptionTile
-                icon={Footprints}
-                label="Walkway"
-                selected={data.projectType === "walkway"}
-                onClick={() => handleTileSelect("projectType", "walkway")}
+                icon={Home}
+                label="Kitchen AND bathroom"
+                selected={data.projectType === "both"}
+                onClick={() => handleTileSelect("projectType", "both")}
                 iconBg="bg-cyan-500/15"
                 iconColor="text-cyan-600"
               />
               <OptionTile
                 icon={HelpCircle}
-                label="Other"
+                label="Other remodeling project"
                 selected={data.projectType === "other"}
                 onClick={() => handleTileSelect("projectType", "other")}
                 iconBg="bg-violet-500/15"
@@ -327,11 +380,11 @@ const Quiz = () => {
             exit="exit"
             transition={{ duration: 0.25 }}
           >
-            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-6 leading-snug">When are you looking to get started?</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-6 leading-snug">When are you looking to start?</h3>
             <div className="grid grid-cols-2 gap-4 mb-4">
               <OptionTile
                 icon={Zap}
-                label="ASAP / Right away"
+                label="Within 2 weeks (ASAP)"
                 selected={data.timeline === "asap"}
                 onClick={() => handleTileSelect("timeline", "asap")}
                 iconBg="bg-orange-500/15"
@@ -339,25 +392,25 @@ const Quiz = () => {
               />
               <OptionTile
                 icon={Calendar}
-                label="This month"
-                selected={data.timeline === "this-month"}
-                onClick={() => handleTileSelect("timeline", "this-month")}
+                label="Within 30 days"
+                selected={data.timeline === "30-days"}
+                onClick={() => handleTileSelect("timeline", "30-days")}
                 iconBg="bg-amber-500/15"
                 iconColor="text-amber-600"
               />
               <OptionTile
                 icon={CalendarClock}
-                label="Within 2-3 months"
-                selected={data.timeline === "2-3-months"}
-                onClick={() => handleTileSelect("timeline", "2-3-months")}
+                label="1-3 months"
+                selected={data.timeline === "1-3-months"}
+                onClick={() => handleTileSelect("timeline", "1-3-months")}
                 iconBg="bg-teal-500/15"
                 iconColor="text-teal-600"
               />
               <OptionTile
                 icon={Clock}
-                label="Not sure"
-                selected={data.timeline === "not-sure"}
-                onClick={() => handleTileSelect("timeline", "not-sure")}
+                label="Just exploring options"
+                selected={data.timeline === "exploring"}
+                onClick={() => handleTileSelect("timeline", "exploring")}
                 iconBg="bg-slate-400/15"
                 iconColor="text-slate-500"
               />
@@ -368,10 +421,54 @@ const Quiz = () => {
           </motion.div>
         )}
 
-        {/* Step 3: ZIP code */}
+        {/* Step 3: Budget Range */}
         {step === 3 && !isSubmitted && (
           <motion.div
             key="step3"
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.25 }}
+          >
+            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-6 leading-snug">What's your budget range for this project?</h3>
+            <div className="grid grid-cols-1 gap-3 mb-4">
+              <BudgetTile
+                label="Under $20,000"
+                selected={data.budgetRange === "under-20k"}
+                onClick={() => handleTileSelect("budgetRange", "under-20k")}
+              />
+              <BudgetTile
+                label="$20,000 - $50,000"
+                selected={data.budgetRange === "20k-50k"}
+                onClick={() => handleTileSelect("budgetRange", "20k-50k")}
+              />
+              <BudgetTile
+                label="$50,000 - $100,000"
+                selected={data.budgetRange === "50k-100k"}
+                onClick={() => handleTileSelect("budgetRange", "50k-100k")}
+              />
+              <BudgetTile
+                label="$100,000+"
+                selected={data.budgetRange === "100k-plus"}
+                onClick={() => handleTileSelect("budgetRange", "100k-plus")}
+              />
+              <BudgetTile
+                label="Not sure yet"
+                selected={data.budgetRange === "not-sure"}
+                onClick={() => handleTileSelect("budgetRange", "not-sure")}
+              />
+            </div>
+            <Button variant="outline" size="lg" onClick={handleBack} className="px-4 h-12">
+              <ArrowLeft className="w-4 h-4" />
+            </Button>
+          </motion.div>
+        )}
+
+        {/* Step 4: ZIP code */}
+        {step === 4 && !isSubmitted && (
+          <motion.div
+            key="step4"
             variants={slideVariants}
             initial="enter"
             animate="center"
@@ -411,10 +508,10 @@ const Quiz = () => {
           </motion.div>
         )}
 
-        {/* Step 4: Contact form */}
-        {step === 4 && !isSubmitted && (
+        {/* Step 5: Contact form */}
+        {step === 5 && !isSubmitted && (
           <motion.div
-            key="step4"
+            key="step5"
             variants={slideVariants}
             initial="enter"
             animate="center"
@@ -427,7 +524,7 @@ const Quiz = () => {
               <h3 className="text-lg sm:text-2xl font-bold text-foreground mb-1.5">
                 Your ZIP Code Qualifies!
               </h3>
-              <p className="text-sm text-muted-foreground leading-snug">
+              <p className="text-sm text-muted-foreground leading-snug max-w-sm mx-auto">
                 Fill out the form below to schedule your free estimate and claim your $2,000 discount before spots fill up.
               </p>
             </div>
@@ -560,7 +657,7 @@ const Quiz = () => {
               
               {/* Clear next steps with timeline */}
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-sm mx-auto">
-                A local team member will contact you <span className="font-medium text-foreground">within 24 hours</span> to schedule your free estimate.
+                A local team member will contact you <span className="font-medium text-foreground">within 24 hours</span> to schedule your free consultation.
               </p>
               
               {/* Trust footer */}

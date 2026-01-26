@@ -8,7 +8,7 @@ const Footer = () => {
           <img src={logo} alt="14er Renovations" className="h-12 sm:h-14 w-auto" />
           
           <p className="text-xs sm:text-sm text-center md:text-left">
-            © {new Date().getFullYear()} 14er Renovation. All rights reserved. Serving Colorado homeowners.
+            © {new Date().getFullYear()} 14er Renovation. All rights reserved. Serving Colorado homeowners with kitchen, bathroom, and basement remodeling.
           </p>
         </div>
       </div>

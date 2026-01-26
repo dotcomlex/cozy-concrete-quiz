@@ -17,14 +17,14 @@ const GallerySection = () => {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const projects = [
-    { image: drivewayBrick, alt: "Cracked driveway transformed to smooth concrete at brick Colorado home", label: "Driveway", location: "Denver, CO" },
-    { image: patioBackyard, alt: "Backyard patio with weeds replaced with clean concrete surface", label: "Patio", location: "Littleton, CO" },
-    { image: drivewayStucco, alt: "Weathered driveway replaced with fresh concrete at stucco home", label: "Driveway", location: "Boulder, CO" },
-    { image: drivewayWinter, alt: "Winter-damaged spalling driveway replaced with new concrete", label: "Driveway", location: "Lakewood, CO" },
-    { image: patioEvening, alt: "Worn brick patio transformed to smooth concrete outdoor living space", label: "Patio", location: "Aurora, CO" },
-    { image: drivewayRanch, alt: "Stained ranch home driveway replaced with clean concrete", label: "Driveway", location: "Arvada, CO" },
-    { image: drivewayFlorida, alt: "Patched uneven driveway replaced with uniform concrete", label: "Driveway", location: "Castle Rock, CO" },
-    { image: crewAction, alt: "14er Concrete crew finishing a new patio pour", label: "Our Crew", location: "Colorado" },
+    { image: drivewayBrick, alt: "Outdated kitchen transformed to modern design with custom cabinets", label: "Kitchen Remodel", location: "Denver, CO" },
+    { image: patioBackyard, alt: "Traditional bathroom updated to spa-like retreat with tile work", label: "Bathroom", location: "Littleton, CO" },
+    { image: drivewayStucco, alt: "Unfinished basement converted to beautiful living space", label: "Basement", location: "Boulder, CO" },
+    { image: drivewayWinter, alt: "Complete kitchen renovation with countertops and lighting", label: "Kitchen Remodel", location: "Lakewood, CO" },
+    { image: patioEvening, alt: "Master bathroom remodel with walk-in shower and vanity", label: "Bathroom", location: "Aurora, CO" },
+    { image: drivewayRanch, alt: "Basement finishing with entertainment area and bar", label: "Basement", location: "Arvada, CO" },
+    { image: drivewayFlorida, alt: "Kitchen and bathroom combo remodel transformation", label: "Kitchen & Bath", location: "Castle Rock, CO" },
+    { image: crewAction, alt: "14er Renovation crew working on a kitchen remodel", label: "Our Crew", location: "Colorado" },
   ];
 
   useEffect(() => {
@@ -58,10 +58,10 @@ const GallerySection = () => {
             Transformations
           </span>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4">
-            Real Colorado <span className="text-primary">Results</span>
+            Real Colorado <span className="text-primary">Transformations</span>
           </h2>
           <p className="text-base text-muted-foreground max-w-xl mx-auto">
-            See what's possible — driveways, patios, walkways, and more
+            See what's possible — kitchens, bathrooms, basements, and more
           </p>
         </div>
 

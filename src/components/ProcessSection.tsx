@@ -6,25 +6,25 @@ const ProcessSection = () => {
       icon: MessageSquare,
       number: "1",
       title: "Answer Quick Questions",
-      description: "Tell us about your project so we can prepare the right estimate.",
+      description: "Tell us about your remodeling project so we can prepare the right consultation.",
     },
     {
       icon: CalendarCheck,
       number: "2",
-      title: "Free On-Site Estimate",
-      description: "A concrete expert visits your home to review options.",
+      title: "Free In-Home Consultation",
+      description: "A remodeling expert visits your home to discuss options, design ideas, and materials.",
     },
     {
       icon: FileText,
       number: "3",
       title: "Clear, Upfront Price",
-      description: "No pressure, no hidden fees. You know exactly what to expect.",
+      description: "No pressure, no hidden fees. You know exactly what to expect before we start.",
     },
     {
       icon: Hammer,
       number: "4",
       title: "We Handle Everything",
-      description: "Love your quote? We schedule a time and handle tear-out, prep, pour, and finish.",
+      description: "Love your quote? We schedule a time and handle demolition, construction, and finishing touches.",
     },
   ];
 

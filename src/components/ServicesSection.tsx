@@ -1,4 +1,4 @@
-import { Car, Sun, Footprints, Layers, Hammer } from "lucide-react";
+import { ChefHat, Droplets, Home, Maximize, Hammer } from "lucide-react";
 import serviceDriveway from "@/assets/service-driveway.jpg";
 import servicePatio from "@/assets/service-patio.jpg";
 import serviceWalkway from "@/assets/service-walkway.jpg";
@@ -8,27 +8,27 @@ import serviceCustom from "@/assets/service-custom.jpg";
 const services = [
   {
     image: serviceDriveway,
-    title: "Driveways",
-    tagline: "Boost curb appeal",
-    icon: Car,
+    title: "Kitchens",
+    tagline: "The heart of your home",
+    icon: ChefHat,
   },
   {
     image: servicePatio,
-    title: "Patios",
-    tagline: "Outdoor living, elevated",
-    icon: Sun,
+    title: "Bathrooms",
+    tagline: "Your private retreat",
+    icon: Droplets,
   },
   {
     image: serviceWalkway,
-    title: "Walkways",
-    tagline: "First impressions that last",
-    icon: Footprints,
+    title: "Basements",
+    tagline: "Unlock hidden potential",
+    icon: Home,
   },
   {
     image: serviceRetainingWall,
-    title: "Retaining Walls",
-    tagline: "Strength meets style",
-    icon: Layers,
+    title: "Home Additions",
+    tagline: "Expand your space",
+    icon: Maximize,
   },
   {
     image: serviceCustom,
@@ -106,7 +106,7 @@ const ServicesSection = () => {
         </div>
         
         <p className="text-center text-muted-foreground mt-6 text-sm sm:text-base">
-          Garage floors, pool decks, curbing, and more — no matter the project, we've got you covered.
+          From kitchen refreshes to whole-home renovations — no matter the project, we've got you covered.
         </p>
       </div>
     </section>
