@@ -1,74 +1,101 @@
 
-# Hero & Gallery Section Improvements
+
+# Quiz & Gallery Cleanup Plan
 
 ## Overview
-Improve the mobile experience by fixing spacing issues in the hero section, replacing the background image, enhancing text visibility, and simplifying the gallery for easier manual browsing.
+Clean up the quiz by fixing the timeline option text, standardizing fonts throughout, and simplify the gallery by removing labels and adding the uploaded bathroom renovation images plus generating kitchen renovation images.
 
 ---
 
 ## Changes to Implement
 
-### 1. Fix Hero Section Spacing
-**File:** `src/components/HeroSection.tsx`
+### 1. Change Timeline Option Text
+**File:** `src/components/Quiz.tsx`
 
-**Issues identified from screenshot:**
-- Headline, subheadline, and quiz are too close together
-- Too much empty space below the quiz (the dark area at the bottom)
+**Current:** "Just exploring options" (line 364)
+**New:** "Not Sure"
 
-**Fixes:**
-- Increase spacing between headline and subheadline: `space-y-3` → `space-y-4 sm:space-y-5`
-- Add more margin between "BREAKING" badge and headline: `mb-3 sm:mb-4` → `mb-4 sm:mb-5`
-- Add margin below subheadline: `mb-4 sm:mb-5` → `mb-6`
-- Change hero section from `min-h-screen` to `min-h-[auto]` with proper padding to eliminate excess bottom space
+Also update the label function (line 96):
+- Current: `return "Just exploring options";`
+- New: `return "Not Sure";`
 
-### 2. Replace Background Image
-**File:** `src/components/HeroSection.tsx`
+---
 
-**Action:**
-- Copy the uploaded Colorado mountain home image (`ChatGPT_Image_Jan_12_2026_02_43_59_PM.png`) to `src/assets/hero-colorado-home.png`
-- Update the import to use the new image
-- The image shows a beautiful stone cottage with mountains at dusk - perfect for a remodeling company
+### 2. Standardize Quiz Typography
+**File:** `src/components/Quiz.tsx`
 
-### 3. Enhance Text Visibility Over Image
-**File:** `src/index.css`
+The final page (step 5) has nice, clean typography. The question pages use `font-bold` which appears too heavy. Let's match the final page style.
 
-**Improvements to `.hero-overlay`:**
-- Strengthen the gradient overlay to make text more readable
-- Current overlay is too light for the new warm-toned image
+**Question Headlines (lines 291, 337, 390, 439)**
+- Current: `text-lg sm:text-xl font-bold`
+- New: `text-lg sm:text-xl font-semibold` (lighter weight, matches step 5 subtext style)
 
-**New overlay:**
-```css
-.hero-overlay {
-  background: 
-    linear-gradient(to bottom, hsl(var(--hero) / 0.7) 0%, hsl(var(--hero) / 0.5) 50%, hsl(var(--hero) / 0.85) 100%),
-    linear-gradient(to right, hsl(var(--hero) / 0.8) 0%, hsl(var(--hero) / 0.4) 100%);
-}
-```
+**OptionCard Label (line 210)**
+- Current: `text-[13px] sm:text-sm font-medium`
+- New: `text-sm font-normal` (cleaner, less heavy)
 
-**Enhance `.hero-text-shadow`:**
-```css
-.hero-text-shadow {
-  text-shadow: 0 2px 12px hsl(0 0% 0% / 0.7), 0 4px 24px hsl(0 0% 0% / 0.5);
-}
-```
+**OptionCard Selected State (line 211)**
+- Current: `text-primary font-semibold`
+- New: `text-primary font-medium` (less heavy when selected)
 
-### 4. Simplify Gallery Section - Remove Auto-Scroll
+**BudgetCard Label (line 244)**
+- Current: `text-base sm:text-lg font-semibold`
+- New: `text-base sm:text-lg font-medium` (consistent with other cards)
+
+---
+
+### 3. Remove Gallery Image Labels/Headlines
 **File:** `src/components/GallerySection.tsx`
 
-**Changes:**
-- Remove the `isAutoPlaying` state and `useEffect` timer (lines 17, 30-36)
-- Remove `setIsAutoPlaying(false)` calls from navigation functions
-- This makes the gallery fully manual - users control when they want to see the next project
-- Keep the left/right arrows and thumbnail strip for easy navigation
-- Keep the progress dots as indicators
+**Remove:** Lines 68-72 (the entire label overlay div)
+```jsx
+{/* Project Label Overlay */}
+<div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+  <p className="text-white font-medium text-lg">{projects[currentIndex].label}</p>
+  <p className="text-white/70 text-sm">{projects[currentIndex].location}</p>
+</div>
+```
 
-### 5. Gallery Layout Cleanup
+The images will display clean without text overlays, making them feel more natural and less cluttered.
+
+---
+
+### 4. Replace Gallery Images with Uploaded Bathroom Renovations
 **File:** `src/components/GallerySection.tsx`
 
-**Simplifications:**
-- Remove the progress dots row (lines 104-116) - thumbnails provide enough navigation
-- Make thumbnails slightly larger for easier tapping on mobile: `w-16 h-16` → `w-18 h-18 sm:w-20 sm:h-20`
-- Remove the credibility statement at the bottom (line 144-146) - not needed here
+**Copy uploaded images to assets:**
+- `user-uploads://2.png` → `src/assets/gallery-bathroom-1.png`
+- `user-uploads://e40ed250-39f2-4182-87e8-56face9f6d73.png` → `src/assets/gallery-bathroom-2.png`
+- `user-uploads://image.png` → `src/assets/gallery-bathroom-3.png`
+
+**Update projects array** with the new bathroom renovation images and appropriate alt text.
+
+---
+
+### 5. Generate Kitchen Renovation Images
+**Action:** Use AI image generation to create 2-3 kitchen renovation before/after images in the same style as the uploaded bathroom photos.
+
+**Prompts for generation:**
+1. "Professional before and after kitchen renovation photo, split down the middle, left side showing outdated 1980s kitchen with oak cabinets, right side showing modern white kitchen with quartz countertops, matching lighting and angle"
+2. "Before and after kitchen remodel comparison, left half old dark cramped kitchen, right half bright open modern kitchen with island and stainless appliances, professional real estate photography style"
+
+These will be saved as:
+- `src/assets/gallery-kitchen-1.png`
+- `src/assets/gallery-kitchen-2.png`
+
+---
+
+## Updated Gallery Projects Array
+
+```javascript
+const projects = [
+  { image: bathroomReno1, alt: "Bathroom renovation before and after transformation" },
+  { image: bathroomReno2, alt: "Luxury bathroom remodel with blue tile and gold accents" },
+  { image: bathroomReno3, alt: "Complete bathroom renovation with modern fixtures" },
+  { image: kitchenReno1, alt: "Kitchen renovation before and after" },
+  { image: kitchenReno2, alt: "Modern kitchen remodel transformation" },
+];
+```
 
 ---
 
@@ -76,42 +103,41 @@ Improve the mobile experience by fixing spacing issues in the hero section, repl
 
 | File | Changes |
 |------|---------|
-| `src/components/HeroSection.tsx` | Fix spacing, replace bg image import |
-| `src/index.css` | Strengthen overlay and text shadow |
-| `src/components/GallerySection.tsx` | Remove auto-scroll, simplify navigation |
-| Copy new image | `user-uploads://ChatGPT_Image_Jan_12_2026_02_43_59_PM.png` → `src/assets/hero-colorado-home.png` |
+| `src/components/Quiz.tsx` | Change "Just exploring options" → "Not Sure", lighten font weights |
+| `src/components/GallerySection.tsx` | Remove label overlay, update images array |
+| Copy images | 3 uploaded bathroom images to `src/assets/` |
+| Generate images | 2 AI-generated kitchen before/after images |
 
 ---
 
 ## Visual Result
 
-**Hero Section - Before:**
-- Elements cramped together
-- Large empty space below quiz
-- Lighter overlay making text harder to read
+**Quiz - Before:**
+- "Just exploring options" as timeline option
+- Heavy bold fonts on questions
+- Inconsistent typography between steps
 
-**Hero Section - After:**
-- Proper breathing room between headline, subheadline, quiz
-- Hero section fits content without excess bottom space
-- Stronger overlay ensures text pops
-- Beautiful Colorado home with mountains as backdrop
+**Quiz - After:**
+- "Not Sure" as timeline option
+- Lighter, cleaner font weights (semibold/medium instead of bold)
+- Consistent typography matching the nice final form page
 
 **Gallery - Before:**
-- Auto-scrolls every 4 seconds
-- Progress dots + thumbnails (redundant)
-- Credibility statement cluttering the section
+- Text overlays on each image (label + location)
+- Placeholder/unrelated images
 
 **Gallery - After:**
-- User-controlled manual navigation only
-- Larger thumbnails for easy mobile tapping
-- Cleaner, focused experience
+- Clean, full-bleed images with no text overlays
+- Real bathroom before/after renovation photos
+- AI-generated kitchen before/after photos matching the style
 
 ---
 
 ## Technical Notes
 
-- New background image will be optimized through Vite's asset pipeline
-- Image uses `fetchPriority="high"` and `loading="eager"` for fast LCP
-- All touch targets remain 44px+ for accessibility
-- Reduced JavaScript overhead by removing auto-scroll timer
+- Font weight changes: `font-bold` (700) → `font-semibold` (600) for headings
+- Option cards: `font-medium` (500) → `font-normal` (400) for labels
+- All images will be optimized through Vite's asset pipeline
+- Gallery thumbnails remain interactive and appropriately sized
+- No changes to quiz logic, validation, or webhook
 
