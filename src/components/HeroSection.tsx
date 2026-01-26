@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import Quiz from "./Quiz";
-import heroImage from "@/assets/hero-colorado.jpg";
+import heroImage from "@/assets/hero-colorado-home.png";
 import logo from "@/assets/14er-logo.png";
 
 import { Shield, CheckCircle } from "lucide-react";
 
 const HeroSection = () => {
   return (
-    <section id="hero" className="relative min-h-screen bg-hero overflow-hidden">
+    <section id="hero" className="relative bg-hero overflow-hidden">
       {/* Background image with overlay */}
       <div className="absolute inset-0">
         <img
@@ -45,9 +45,9 @@ const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="space-y-3 lg:space-y-4">
+            <div className="space-y-4 sm:space-y-5 lg:space-y-6">
               {/* Breaking Badge - separate with more margin */}
-              <div className="mb-3 sm:mb-4">
+              <div className="mb-4 sm:mb-5">
                 <span className="inline-block bg-red-600 text-white text-xs sm:text-sm font-bold uppercase px-2 py-1 rounded animate-pulse">
                   🚨 BREAKING
                 </span>
@@ -59,7 +59,7 @@ const HeroSection = () => {
                 any remodeling project through our Winter Upgrade Program!
               </h1>
 
-              <p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-lg leading-relaxed hero-text-shadow mb-4 sm:mb-5">
+              <p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-lg leading-relaxed hero-text-shadow mb-6">
                 Trusted by Colorado homeowners for kitchens, bathrooms, basements, and more. Book your FREE in-home consultation and claim the <span className="font-semibold text-highlight">$2,000 OFF</span> offer today.
               </p>
               

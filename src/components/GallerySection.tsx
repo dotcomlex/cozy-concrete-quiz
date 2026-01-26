@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -14,7 +14,6 @@ import crewAction from "@/assets/gallery-crew-action.webp";
 
 const GallerySection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const projects = [
     { image: drivewayBrick, alt: "Outdated kitchen transformed to modern design with custom cabinets", label: "Kitchen Remodel", location: "Denver, CO" },
@@ -27,26 +26,15 @@ const GallerySection = () => {
     { image: crewAction, alt: "14er Renovation crew working on a kitchen remodel", label: "Our Crew", location: "Colorado" },
   ];
 
-  useEffect(() => {
-    if (!isAutoPlaying) return;
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % projects.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, [isAutoPlaying, projects.length]);
-
   const nextSlide = () => {
-    setIsAutoPlaying(false);
     setCurrentIndex((prev) => (prev + 1) % projects.length);
   };
 
   const prevSlide = () => {
-    setIsAutoPlaying(false);
     setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
   };
 
   const goToSlide = (index: number) => {
-    setIsAutoPlaying(false);
     setCurrentIndex(index);
   };
 
@@ -101,22 +89,9 @@ const GallerySection = () => {
             <ChevronRight className="w-5 h-5" />
           </Button>
 
-          <div className="flex justify-center gap-2 mt-6">
-            {projects.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToSlide(index)}
-                className={`h-2.5 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "bg-primary w-8"
-                    : "bg-muted-foreground/25 hover:bg-muted-foreground/40 w-2.5"
-                }`}
-              />
-            ))}
-          </div>
         </div>
 
-        <div className="flex justify-center gap-3 mt-6 overflow-x-auto pb-2 hide-scrollbar">
+        <div className="flex justify-center gap-2 sm:gap-3 mt-6 overflow-x-auto pb-2 hide-scrollbar">
           {projects.map((project, index) => (
             <button
               key={index}
@@ -130,20 +105,15 @@ const GallerySection = () => {
               <img
                 src={project.image}
                 alt={project.alt}
-                width={64}
-                height={64}
+                width={72}
+                height={72}
                 loading="lazy"
                 decoding="async"
-                className="w-16 h-16 sm:w-18 sm:h-18 object-cover"
+                className="w-[72px] h-[72px] sm:w-20 sm:h-20 object-cover"
               />
             </button>
           ))}
         </div>
-
-        {/* Credibility Statement */}
-        <p className="text-center text-muted-foreground mt-8 text-sm font-medium">
-          From simple refreshes to fully custom designs — we handle it all
-        </p>
       </div>
     </section>
   );
