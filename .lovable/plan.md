@@ -1,98 +1,74 @@
 
-
-# Quiz Mobile Optimization Plan
+# Hero & Gallery Section Improvements
 
 ## Overview
-Clean up the quiz by removing the redundant "Winter Upgrade Program" badge and improving typography/sizing for a better mobile experience.
+Improve the mobile experience by fixing spacing issues in the hero section, replacing the background image, enhancing text visibility, and simplifying the gallery for easier manual browsing.
 
 ---
 
 ## Changes to Implement
 
-### 1. Remove "Winter Upgrade Program" Badge
-**File:** `src/components/Quiz.tsx`
-**Lines:** 279-287
+### 1. Fix Hero Section Spacing
+**File:** `src/components/HeroSection.tsx`
 
-Remove the entire header badge section from the quiz card. The user already knows about the program from the hero headline, so this is redundant visual clutter.
+**Issues identified from screenshot:**
+- Headline, subheadline, and quiz are too close together
+- Too much empty space below the quiz (the dark area at the bottom)
 
-**Delete:**
-```jsx
-{/* Header Badge - show on Steps 1-4 only */}
-{step < 5 && !isSubmitted && (
-  <div className="text-center mb-7">
-    <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary/20 to-primary/10 text-primary text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-primary/20">
-      <Sparkles className="w-3.5 h-3.5" />
-      Winter Upgrade Program
-    </div>
-  </div>
-)}
+**Fixes:**
+- Increase spacing between headline and subheadline: `space-y-3` → `space-y-4 sm:space-y-5`
+- Add more margin between "BREAKING" badge and headline: `mb-3 sm:mb-4` → `mb-4 sm:mb-5`
+- Add margin below subheadline: `mb-4 sm:mb-5` → `mb-6`
+- Change hero section from `min-h-screen` to `min-h-[auto]` with proper padding to eliminate excess bottom space
+
+### 2. Replace Background Image
+**File:** `src/components/HeroSection.tsx`
+
+**Action:**
+- Copy the uploaded Colorado mountain home image (`ChatGPT_Image_Jan_12_2026_02_43_59_PM.png`) to `src/assets/hero-colorado-home.png`
+- Update the import to use the new image
+- The image shows a beautiful stone cottage with mountains at dusk - perfect for a remodeling company
+
+### 3. Enhance Text Visibility Over Image
+**File:** `src/index.css`
+
+**Improvements to `.hero-overlay`:**
+- Strengthen the gradient overlay to make text more readable
+- Current overlay is too light for the new warm-toned image
+
+**New overlay:**
+```css
+.hero-overlay {
+  background: 
+    linear-gradient(to bottom, hsl(var(--hero) / 0.7) 0%, hsl(var(--hero) / 0.5) 50%, hsl(var(--hero) / 0.85) 100%),
+    linear-gradient(to right, hsl(var(--hero) / 0.8) 0%, hsl(var(--hero) / 0.4) 100%);
+}
 ```
 
----
+**Enhance `.hero-text-shadow`:**
+```css
+.hero-text-shadow {
+  text-shadow: 0 2px 12px hsl(0 0% 0% / 0.7), 0 4px 24px hsl(0 0% 0% / 0.5);
+}
+```
 
-### 2. Improve Quiz Typography for Mobile
-**File:** `src/components/Quiz.tsx`
+### 4. Simplify Gallery Section - Remove Auto-Scroll
+**File:** `src/components/GallerySection.tsx`
 
-**Question Headlines (lines 300, 346, 399, 448)**
-- Current: `text-xl sm:text-2xl`
-- New: `text-lg sm:text-xl` (slightly smaller for better mobile fit)
+**Changes:**
+- Remove the `isAutoPlaying` state and `useEffect` timer (lines 17, 30-36)
+- Remove `setIsAutoPlaying(false)` calls from navigation functions
+- This makes the gallery fully manual - users control when they want to see the next project
+- Keep the left/right arrows and thumbnail strip for easy navigation
+- Keep the progress dots as indicators
 
-**OptionCard Label (line 210)**
-- Current: `text-sm sm:text-base`  
-- New: `text-[13px] sm:text-sm` (tighter mobile sizing)
+### 5. Gallery Layout Cleanup
+**File:** `src/components/GallerySection.tsx`
 
-**OptionCard Icon Container (line 200)**
-- Current: `w-14 h-14`
-- New: `w-11 h-11 sm:w-12 sm:h-12` (smaller on mobile)
-
-**OptionCard Icon (line 205)**
-- Current: `w-6 h-6`
-- New: `w-5 h-5 sm:w-6 sm:h-6` (proportional to container)
-
-**OptionCard/BudgetCard Padding (lines 194, 238)**
-- Current: `p-4 sm:p-5`
-- New: `p-3 sm:p-4` (tighter padding for mobile)
-
----
-
-### 3. Reduce Quiz Card Padding
-**File:** `src/components/Quiz.tsx`
-**Line:** 278
-
-- Current: `p-6 sm:p-8`
-- New: `p-4 sm:p-6` (more compact on mobile)
-
----
-
-### 4. Tighten Progress Dots Spacing
-**File:** `src/components/Quiz.tsx`
-**Line:** 263
-
-- Current: `mb-6`
-- New: `mb-4` (reduce gap between dots and card)
-
----
-
-### 5. Reduce Grid Gap for Mobile
-**File:** `src/components/Quiz.tsx`
-**Lines:** 303, 349, 402
-
-- Current: `gap-3`
-- New: `gap-2 sm:gap-3` (tighter grid on mobile)
-
----
-
-## Visual Impact
-
-**Before:**
-- Large badge taking up space
-- Oversized fonts on mobile
-- Generous padding feels cramped on small screens
-
-**After:**
-- Clean, focused quiz with no redundant elements
-- Properly scaled typography for mobile thumbs
-- Compact but comfortable touch targets (still 44px+ height)
+**Simplifications:**
+- Remove the progress dots row (lines 104-116) - thumbnails provide enough navigation
+- Make thumbnails slightly larger for easier tapping on mobile: `w-16 h-16` → `w-18 h-18 sm:w-20 sm:h-20`
+- Remove the credibility statement at the bottom (line 144-146) - not needed here
 
 ---
 
@@ -100,15 +76,42 @@ Remove the entire header badge section from the quiz card. The user already know
 
 | File | Changes |
 |------|---------|
-| `src/components/Quiz.tsx` | Remove badge, adjust typography sizes, reduce padding |
+| `src/components/HeroSection.tsx` | Fix spacing, replace bg image import |
+| `src/index.css` | Strengthen overlay and text shadow |
+| `src/components/GallerySection.tsx` | Remove auto-scroll, simplify navigation |
+| Copy new image | `user-uploads://ChatGPT_Image_Jan_12_2026_02_43_59_PM.png` → `src/assets/hero-colorado-home.png` |
+
+---
+
+## Visual Result
+
+**Hero Section - Before:**
+- Elements cramped together
+- Large empty space below quiz
+- Lighter overlay making text harder to read
+
+**Hero Section - After:**
+- Proper breathing room between headline, subheadline, quiz
+- Hero section fits content without excess bottom space
+- Stronger overlay ensures text pops
+- Beautiful Colorado home with mountains as backdrop
+
+**Gallery - Before:**
+- Auto-scrolls every 4 seconds
+- Progress dots + thumbnails (redundant)
+- Credibility statement cluttering the section
+
+**Gallery - After:**
+- User-controlled manual navigation only
+- Larger thumbnails for easy mobile tapping
+- Cleaner, focused experience
 
 ---
 
 ## Technical Notes
 
-- All touch targets remain at least 44px (iOS/Android accessibility standard)
-- Font sizes use Tailwind's responsive prefixes for optimal scaling
-- Webhook and validation logic unchanged
-- Animations remain smooth
-- Progress dots and trust footer unchanged
+- New background image will be optimized through Vite's asset pipeline
+- Image uses `fetchPriority="high"` and `loading="eager"` for fast LCP
+- All touch targets remain 44px+ for accessibility
+- Reduced JavaScript overhead by removing auto-scroll timer
 
