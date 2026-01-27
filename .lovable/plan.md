@@ -1,122 +1,246 @@
 
-# Quiz Typography & Gallery Improvements
+
+# Quiz Form Mobile UX Refinement
 
 ## Overview
-Fix inconsistent font styles in the quiz for a cohesive, mobile-first experience, and regenerate realistic before/after kitchen renovation images with matching angles.
+Optimize the quiz form for a premium mobile-first experience by adjusting input field sizes, spacing, button proportions, and overall visual hierarchy.
 
 ---
 
-## Part 1: Quiz Typography Fixes
+## Changes to Implement
 
-### Issue Analysis
-Looking at the screenshot showing "What's your zip code?" - the input placeholder "Enter ZIP code" has heavy, bold text that looks out of place. The font styling across quiz steps is inconsistent.
+### 1. Quiz Card Container Improvements
+**File:** `src/components/Quiz.tsx` (line 284)
 
-### Changes to `src/components/Quiz.tsx`
-
-**1. ZIP Code Input Placeholder Styling (line 452)**
-- Current: `font-bold tracking-wider`
-- New: `font-medium` (cleaner, matches form fields on step 5)
-
+**Current:**
 ```tsx
-// Line 452 - Current
-className="pl-12 h-16 text-lg text-center rounded-2xl border-2 focus:border-primary font-bold tracking-wider"
-
-// After
-className="pl-12 h-14 text-base text-center rounded-2xl border-2 focus:border-primary font-medium"
+className="quiz-card-glass rounded-2xl shadow-quiz-glow p-4 sm:p-6 w-full border-2 border-primary/30"
 ```
 
-**2. All Question Headlines - Lighter Weight**
-Lines 291, 337, 390, 439:
-- Current: `text-lg sm:text-xl font-semibold`
-- New: `text-lg sm:text-xl font-medium` (lighter, more modern)
+**New:**
+```tsx
+className="quiz-card-glass rounded-2xl shadow-quiz-glow p-5 sm:p-6 w-full border border-primary/20"
+```
 
-**3. Step 5 "Your ZIP Code Qualifies!" Header (line 491)**
-- Current: `text-lg sm:text-2xl font-bold`
-- This one is celebration, so keep bold but reduce size on mobile: `text-base sm:text-xl font-semibold`
-
-**4. Success Screen Title (line 632)**
-- Current: `text-xl sm:text-2xl font-bold`
-- New: `text-lg sm:text-xl font-semibold` (consistent with rest)
-
-**5. OptionCard Label - Already font-normal but selected state is font-medium**
-This is fine, no change needed.
+Changes:
+- Increased mobile padding from `p-4` to `p-5` for better breathing room
+- Reduced border thickness from `border-2` to `border` (more refined)
+- Softer border opacity from `border-primary/30` to `border-primary/20`
 
 ---
 
-## Part 2: Gallery Before/After Images
+### 2. Input Field Refinements
+**File:** `src/components/Quiz.tsx`
 
-### Problem
-The AI-generated kitchen renovation images have different angles between before/after sides, making them look unrealistic.
+**All input fields (lines 458, 531, 553, 575):**
+- Current: `h-14 text-base`
+- New: `h-12 text-[15px]` (slightly smaller, better proportioned for mobile)
 
-### Solution
-Regenerate 2 kitchen before/after images with these strict requirements:
-- Same exact camera angle
-- Same room layout
-- Same perspective and focal length
-- Only the finishes, appliances, and fixtures change
+**Icon positioning:**
+- Current: `left-3.5`
+- New: `left-3` (tighter alignment)
 
-### AI Image Generation Prompts
-
-**Kitchen Image 1:**
-```
-Professional before and after kitchen renovation photo, single split-view image. 
-Left side: dated 1990s kitchen with oak cabinets, laminate countertops, beige appliances, fluorescent lighting, same exact room layout and camera angle as right side.
-Right side: modern renovated kitchen with white shaker cabinets, quartz countertops, stainless steel appliances, pendant lighting.
-CRITICAL: Both sides must show the SAME kitchen from the SAME camera angle, only the materials and finishes are different. Professional real estate photography style, even lighting.
-```
-
-**Kitchen Image 2:**
-```
-Before and after kitchen remodel comparison, single split-view photograph.
-Left half: outdated galley kitchen with dark wood cabinets, old tile backsplash, dated hardware, same exact perspective as right half.
-Right half: bright modern galley kitchen with light gray cabinets, subway tile backsplash, updated fixtures.
-CRITICAL: Identical room, identical camera angle, identical perspective - only the renovation changes. Professional photography quality.
-```
-
-### Files to Update
-- `src/assets/gallery-kitchen-1.jpg` - Replace with new realistic image
-- `src/assets/gallery-kitchen-2.jpg` - Replace with new realistic image
+**Icon inside inputs:**
+- Current: `w-5 h-5`
+- New: `w-4 h-4` (proportional to smaller inputs)
 
 ---
 
-## Summary of All Changes
+### 3. Form Field Spacing
+**File:** `src/components/Quiz.tsx` (line 519)
 
-| File | Line(s) | Change |
-|------|---------|--------|
-| `src/components/Quiz.tsx` | 291, 337, 390, 439 | Question headlines: `font-semibold` → `font-medium` |
-| `src/components/Quiz.tsx` | 452 | ZIP input: `font-bold tracking-wider` → `font-medium`, `h-16 text-lg` → `h-14 text-base` |
-| `src/components/Quiz.tsx` | 491 | Qualifies header: `text-lg sm:text-2xl font-bold` → `text-base sm:text-xl font-semibold` |
-| `src/components/Quiz.tsx` | 632 | Success title: `text-xl sm:text-2xl font-bold` → `text-lg sm:text-xl font-semibold` |
-| `src/assets/gallery-kitchen-1.jpg` | - | Regenerate with matching angles |
-| `src/assets/gallery-kitchen-2.jpg` | - | Regenerate with matching angles |
+**Current:**
+```tsx
+<div className="space-y-3 mb-5">
+```
+
+**New:**
+```tsx
+<div className="space-y-2.5 mb-4">
+```
+
+Tighter vertical rhythm for a more compact, professional form.
+
+---
+
+### 4. Submit Button Refinement
+**File:** `src/components/Quiz.tsx` (lines 587-600)
+
+**Current:**
+```tsx
+className="w-full h-14 text-base font-semibold bg-gradient-to-r from-primary to-orange-500..."
+```
+
+**New:**
+```tsx
+className="w-full h-12 text-[15px] font-semibold bg-gradient-to-r from-primary to-orange-500..."
+```
+
+Changes:
+- Reduced height from `h-14` to `h-12` (consistent with inputs)
+- Text size from `text-base` to `text-[15px]` (matches inputs)
+
+---
+
+### 5. OptionCard Touch Targets
+**File:** `src/components/Quiz.tsx** (lines 200-204)
+
+**Current:**
+```tsx
+className={`relative flex flex-col items-center justify-center gap-2 p-3 sm:p-4 rounded-xl...`}
+```
+
+**New:**
+```tsx
+className={`relative flex flex-col items-center justify-center gap-1.5 p-3.5 sm:p-4 rounded-xl min-h-[100px]...`}
+```
+
+Changes:
+- Reduced gap from `gap-2` to `gap-1.5` (tighter layout)
+- Slightly increased mobile padding `p-3` to `p-3.5`
+- Added `min-h-[100px]` to ensure consistent card heights
+
+---
+
+### 6. Icon Circle Refinement
+**File:** `src/components/Quiz.tsx** (lines 206-213)
+
+**Current:**
+```tsx
+<div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full...`}>
+  <Icon className={`w-5 h-5 sm:w-6 sm:h-6...`} />
+```
+
+**New:**
+```tsx
+<div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full...`}>
+  <Icon className={`w-5 h-5...`} />
+```
+
+Changes:
+- Slightly smaller icon circles for mobile `w-10 h-10`
+- Consistent icon size (remove sm breakpoint)
+
+---
+
+### 7. Question Headlines
+**File:** `src/components/Quiz.tsx** (lines 297, 343, 396, 445)
+
+**Current:**
+```tsx
+className="text-lg sm:text-xl font-medium text-foreground mb-5 text-center leading-snug"
+```
+
+**New:**
+```tsx
+className="text-base sm:text-lg font-medium text-foreground mb-4 text-center leading-tight"
+```
+
+Changes:
+- Smaller mobile text `text-lg` to `text-base`
+- Reduced bottom margin `mb-5` to `mb-4`
+- Tighter line height `leading-snug` to `leading-tight`
+
+---
+
+### 8. Celebration Header (Step 5)
+**File:** `src/components/Quiz.tsx** (lines 495-503)
+
+**Current:**
+```tsx
+<span className="text-3xl mb-1 block">🎉</span>
+<h3 className="text-base sm:text-xl font-semibold..."
+```
+
+**New:**
+```tsx
+<span className="text-2xl mb-0.5 block">🎉</span>
+<h3 className="text-[15px] sm:text-lg font-semibold..."
+```
+
+Changes:
+- Smaller emoji `text-3xl` to `text-2xl`
+- Smaller heading `text-base` to `text-[15px]`
+- Reduced emoji margin
+
+---
+
+### 9. Social Proof Badge
+**File:** `src/components/Quiz.tsx** (lines 507-516)
+
+**Current:**
+```tsx
+<div className="flex items-center justify-center gap-1.5 mb-5">
+```
+
+**New:**
+```tsx
+<div className="flex items-center justify-center gap-1.5 mb-4">
+```
+
+Reduced bottom margin for tighter layout.
+
+---
+
+### 10. Trust Footer
+**File:** `src/components/Quiz.tsx** (line 613)
+
+**Current:**
+```tsx
+className="flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 text-[11px]..."
+```
+
+**New:**
+```tsx
+className="flex flex-wrap items-center justify-center gap-x-1.5 text-[10px]..."
+```
+
+Smaller, more subtle trust indicators.
+
+---
+
+## Summary of Changes
+
+| Element | Before | After |
+|---------|--------|-------|
+| Card padding | `p-4` | `p-5` |
+| Card border | `border-2 border-primary/30` | `border border-primary/20` |
+| Input height | `h-14` | `h-12` |
+| Input text | `text-base` | `text-[15px]` |
+| Input icons | `w-5 h-5` | `w-4 h-4` |
+| Form spacing | `space-y-3 mb-5` | `space-y-2.5 mb-4` |
+| Button height | `h-14` | `h-12` |
+| Question text | `text-lg` | `text-base` |
+| Question margin | `mb-5` | `mb-4` |
+| Icon circles | `w-11 h-11` | `w-10 h-10` |
+| OptionCard gap | `gap-2` | `gap-1.5` |
+| Celebration emoji | `text-3xl` | `text-2xl` |
 
 ---
 
 ## Visual Result
 
-**Quiz - Before:**
-- Heavy, bold placeholder text in ZIP input
-- Inconsistent font weights across steps
-- "Enter ZIP code" looks chunky and dated
+**Before:**
+- Oversized inputs that feel clunky
+- Too much vertical spacing making form feel long
+- Inconsistent element proportions
+- Bold elements competing for attention
 
-**Quiz - After:**
-- Clean, medium-weight fonts throughout
-- Consistent typography from step 1 to success screen
-- Modern, premium mobile-first feel
-
-**Gallery - Before:**
-- Kitchen before/after images have mismatched angles
-- Looks fake and untrustworthy
-
-**Gallery - After:**
-- Realistic transformation photos
-- Same room, same angle, only finishes changed
-- Builds credibility with potential customers
+**After:**
+- Refined, proportional inputs (h-12)
+- Tighter vertical rhythm
+- Consistent sizing across all elements
+- Elegant, premium mobile feel
+- Better use of screen real estate
+- Touch targets still meet 44px accessibility minimum
 
 ---
 
 ## Technical Notes
-- Font weight scale: `font-normal` (400), `font-medium` (500), `font-semibold` (600), `font-bold` (700)
-- Moving from bold (700) to medium (500) creates a significant visual lightening
-- Input height reduced from h-16 to h-14 for better mobile proportions
-- AI image generation will use specific prompts to ensure angle matching
+
+- All touch targets remain above 44px minimum (h-12 = 48px)
+- Input icon positioning adjusted to match new padding
+- Consistent font sizing creates visual harmony
+- Reduced margins and padding create a more compact, professional appearance
+- Changes apply mobile-first with sm: breakpoints for desktop adjustments
+
