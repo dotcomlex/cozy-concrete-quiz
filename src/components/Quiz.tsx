@@ -502,7 +502,7 @@ const Quiz = () => {
                   Your Zip Code Qualifies For This Offer!
                 </h3>
                 <p className="text-sm text-muted-foreground leading-snug max-w-sm mx-auto">
-                  Complete the form below so we can contact you and schedule your 100% free estimate.
+                  Trusted by Colorado homeowners for kitchens, bathrooms, basements, and much more. Answer the questions below to receive your free estimate, free consultation + $2,000 Off!
                 </p>
               </div>
 
