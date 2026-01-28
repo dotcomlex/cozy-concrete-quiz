@@ -656,8 +656,20 @@ const Quiz = () => {
                 Awesome, {data.firstName.split(' ')[0]}—you're all set! 🎉
               </h3>
               
-              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-sm mx-auto">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-4 max-w-sm mx-auto">
                 We'll be reaching out very soon to get more details on your project and schedule your free consultation. Talk soon!
+              </p>
+              
+              <p className="text-xs sm:text-sm text-muted-foreground mb-6">
+                In the meantime, feel free to check out our website:{' '}
+                <a 
+                  href="https://14erenovations.com/home" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline font-medium"
+                >
+                  14erenovations.com
+                </a>
               </p>
               
               <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-muted-foreground pt-3 border-t border-border/50">
