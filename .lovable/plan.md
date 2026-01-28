@@ -1,8 +1,8 @@
 
-# Add More Spacing in Hero Section
+# Improve Thank You Page Copy
 
 ## Overview
-Increase the vertical spacing between the headline, subheadline, and the quiz card to create better visual hierarchy and breathing room.
+Update the success screen copy to be more casual and friendly, with a warmer tone that feels more personal.
 
 ---
 
@@ -10,50 +10,57 @@ Increase the vertical spacing between the headline, subheadline, and the quiz ca
 
 | File | Change |
 |------|--------|
-| `src/components/HeroSection.tsx` | Increase spacing between elements |
+| `src/components/Quiz.tsx` | Update success screen headline and message |
 
 ---
 
-## Change Details
+## Current vs New Copy
 
-**File:** `src/components/HeroSection.tsx`
+### Headline (line 655-657)
 
-### 1. Increase space-y on the headline container (line 41)
+| Current | New |
+|---------|-----|
+| "🎉 SUCCESS! Your $2,000 Discount is Reserved, {firstName}!" | "Awesome, {firstName}—you're all set! 🎉" |
+
+### Subtext (line 659-661)
+
+| Current | New |
+|---------|-----|
+| "We'll be contacting you very soon to schedule your free consultation." | "We'll be reaching out very soon to get more details on your project and schedule your free consultation. Talk soon!" |
+
+---
+
+## Code Changes
+
+**File:** `src/components/Quiz.tsx` (lines 655-661)
+
 ```tsx
 // Before:
-<div className="space-y-4 sm:space-y-5 lg:space-y-6">
+<h3 className="text-base sm:text-lg font-semibold text-foreground mb-3 leading-snug">
+  🎉 SUCCESS! Your $2,000 Discount is Reserved, {data.firstName}!
+</h3>
+
+<p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-sm mx-auto">
+  We'll be contacting you very soon to schedule your free consultation.
+</p>
 
 // After:
-<div className="space-y-6 sm:space-y-7 lg:space-y-8">
-```
+<h3 className="text-base sm:text-lg font-semibold text-foreground mb-3 leading-snug">
+  Awesome, {data.firstName}—you're all set! 🎉
+</h3>
 
-### 2. Increase gap between left and right columns (line 29)
-```tsx
-// Before:
-<div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-8">
-
-// After:
-<div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-12">
-```
-
-### 3. Add more top margin to subheadline (line 55)
-```tsx
-// Before:
-<p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-lg leading-relaxed hero-text-shadow">
-
-// After:
-<p className="text-sm sm:text-base lg:text-lg text-white/90 max-w-lg leading-relaxed hero-text-shadow mt-2">
+<p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-sm mx-auto">
+  We'll be reaching out very soon to get more details on your project and schedule your free consultation. Talk soon!
+</p>
 ```
 
 ---
 
 ## Summary
 
-| Element | Before | After |
-|---------|--------|-------|
-| Headline container spacing | `space-y-4/5/6` | `space-y-6/7/8` |
-| Column gap (mobile) | `gap-4` | `gap-8` |
-| Column gap (desktop) | `gap-8` | `gap-12` |
-| Subheadline margin | none | `mt-2` |
-
-This will add more breathing room between all elements, making the layout feel less cramped.
+This makes the thank you page feel more friendly and conversational:
+- Removes the "SUCCESS!" formality
+- Leads with "Awesome" for a warm greeting
+- Uses "you're all set" instead of formal discount language
+- Adds "Talk soon!" for a personal closing
+- Moves emoji to the end for better flow
