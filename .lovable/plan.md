@@ -1,8 +1,8 @@
 
-# Improve Thank You Page Copy
+# Add Website Link to Thank You Page
 
 ## Overview
-Update the success screen copy to be more casual and friendly, with a warmer tone that feels more personal.
+Add a friendly text with a link to the main website on the success/thank you page so users can explore more about the company.
 
 ---
 
@@ -10,57 +10,54 @@ Update the success screen copy to be more casual and friendly, with a warmer ton
 
 | File | Change |
 |------|--------|
-| `src/components/Quiz.tsx` | Update success screen headline and message |
-
----
-
-## Current vs New Copy
-
-### Headline (line 655-657)
-
-| Current | New |
-|---------|-----|
-| "🎉 SUCCESS! Your $2,000 Discount is Reserved, {firstName}!" | "Awesome, {firstName}—you're all set! 🎉" |
-
-### Subtext (line 659-661)
-
-| Current | New |
-|---------|-----|
-| "We'll be contacting you very soon to schedule your free consultation." | "We'll be reaching out very soon to get more details on your project and schedule your free consultation. Talk soon!" |
+| `src/components/Quiz.tsx` | Add website link text after the main message |
 
 ---
 
 ## Code Changes
 
-**File:** `src/components/Quiz.tsx` (lines 655-661)
+**File:** `src/components/Quiz.tsx` (after line 661, before the security badge)
 
 ```tsx
-// Before:
-<h3 className="text-base sm:text-lg font-semibold text-foreground mb-3 leading-snug">
-  🎉 SUCCESS! Your $2,000 Discount is Reserved, {data.firstName}!
-</h3>
-
-<p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-sm mx-auto">
-  We'll be contacting you very soon to schedule your free consultation.
+// Add this new paragraph after the existing message:
+<p className="text-xs sm:text-sm text-muted-foreground mb-4">
+  In the meantime, feel free to check out our website:{' '}
+  <a 
+    href="https://14erenovations.com/home" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="text-primary hover:underline font-medium"
+  >
+    14erenovations.com
+  </a>
 </p>
+```
 
-// After:
-<h3 className="text-base sm:text-lg font-semibold text-foreground mb-3 leading-snug">
-  Awesome, {data.firstName}—you're all set! 🎉
-</h3>
+---
 
-<p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6 max-w-sm mx-auto">
-  We'll be reaching out very soon to get more details on your project and schedule your free consultation. Talk soon!
-</p>
+## Result Preview
+
+The thank you page will now show:
+
+```text
+Awesome, [First Name]—you're all set! 🎉
+
+We'll be reaching out very soon to get more details on your 
+project and schedule your free consultation. Talk soon!
+
+In the meantime, feel free to check out our website: 14erenovations.com
+
+🛡️ Your information is secure
 ```
 
 ---
 
 ## Summary
 
-This makes the thank you page feel more friendly and conversational:
-- Removes the "SUCCESS!" formality
-- Leads with "Awesome" for a warm greeting
-- Uses "you're all set" instead of formal discount language
-- Adds "Talk soon!" for a personal closing
-- Moves emoji to the end for better flow
+| Element | Details |
+|---------|---------|
+| Text | "In the meantime, feel free to check out our website:" |
+| Link text | "14erenovations.com" |
+| Link URL | https://14erenovations.com/home |
+| Styling | Smaller text, primary color link with hover underline |
+| Opens in | New tab (`target="_blank"`) |
