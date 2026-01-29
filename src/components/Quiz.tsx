@@ -82,6 +82,7 @@ const Quiz = () => {
   const handleNext = () => {
     if (step === 4 && data.zipCode.length >= 5) {
       if (isColoradoZipCode(data.zipCode)) {
+        setIsDisqualified(false); // Reset if user corrected their ZIP
         setStep(5);
       } else {
         setIsDisqualified(true);
@@ -696,7 +697,7 @@ const Quiz = () => {
           )}
 
           {/* Disqualification Screen - Out of State */}
-          {isDisqualified && (
+          {isDisqualified && !isSubmitted && (
             <motion.div
               key="disqualified"
               variants={cardVariants}
