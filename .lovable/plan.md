@@ -1,11 +1,12 @@
 
-# Fix Mobile Auto-Zoom on Input Fields
 
-## The Problem
-On iOS Safari, when you tap an input field with a font size smaller than 16px, the browser automatically zooms in to make the text easier to read. Your quiz inputs currently use `text-[15px]` which triggers this behavior.
+# Revert Main Headline to Original
 
-## The Solution
-Change the font size of all input fields from `text-[15px]` to `text-base` (which equals 16px). This prevents iOS from auto-zooming while maintaining a clean, readable appearance.
+## The Issue
+The main headline (h1) was accidentally changed to the same text as the subheadline. Now both say "Transform your kitchen..." which is duplicated and incorrect.
+
+## The Fix
+Revert the h1 headline back to the original "New Winter Program..." text while keeping the subheadline as you wanted it.
 
 ---
 
@@ -13,65 +14,38 @@ Change the font size of all input fields from `text-[15px]` to `text-base` (whic
 
 | File | Change |
 |------|--------|
-| `src/components/Quiz.tsx` | Update font size on 4 input fields from `text-[15px]` to `text-base` |
+| `src/components/HeroSection.tsx` | Revert h1 to original headline |
 
 ---
 
-## Code Changes
+## Code Change
 
-### 1. ZIP Code Input (line 462)
+### Main Headline (lines 49-53)
 
+**Before (current - wrong):**
 ```tsx
-// Before:
-className="pl-10 h-12 text-[15px] rounded-xl border-2 focus:border-primary"
-
-// After:
-className="pl-10 h-12 text-base rounded-xl border-2 focus:border-primary"
+<h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-extrabold text-white leading-tight hero-text-shadow">
+  Transform your kitchen, bathroom, or any space into something you'll love. Fill out the form below to claim your{" "}
+  <span className="text-highlight">$2,000 discount</span>{" "}
+  and schedule your free consultation.
+</h1>
 ```
 
-### 2. Name Input (line 534)
-
+**After (reverted to original):**
 ```tsx
-// Before:
-className={`pl-10 h-12 text-[15px] rounded-xl border-2 transition-all ${...}`}
-
-// After:
-className={`pl-10 h-12 text-base rounded-xl border-2 transition-all ${...}`}
-```
-
-### 3. Phone Input (line 556)
-
-```tsx
-// Before:
-className={`pl-10 h-12 text-[15px] rounded-xl border-2 transition-all ${...}`}
-
-// After:
-className={`pl-10 h-12 text-base rounded-xl border-2 transition-all ${...}`}
-```
-
-### 4. Email Input (line 582)
-
-```tsx
-// Before:
-className={`pl-10 h-12 text-[15px] rounded-xl border-2 transition-all ${...}`}
-
-// After:
-className={`pl-10 h-12 text-base rounded-xl border-2 transition-all ${...}`}
+<h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-extrabold text-white leading-tight hero-text-shadow">
+  New Winter Program Gives Colorado Homeowners{" "}
+  <span className="text-highlight">$2,000 OFF</span>{" "}
+  Any Remodeling Project—Only 7 Spots Left
+</h1>
 ```
 
 ---
 
-## Why This Works
+## Result
 
-| Font Size | iOS Behavior |
-|-----------|--------------|
-| Less than 16px | Auto-zooms on focus |
-| 16px or larger | No zoom |
+| Element | Text |
+|---------|------|
+| Main headline (h1) | "New Winter Program Gives Colorado Homeowners $2,000 OFF Any Remodeling Project—Only 7 Spots Left" |
+| Subheadline (p) | "Transform your kitchen, bathroom, or any space into something you'll love..." (stays as you wanted) |
 
-`text-base` in Tailwind equals `font-size: 1rem` which is 16px by default, exactly at the threshold to prevent iOS auto-zoom.
-
----
-
-## Summary
-
-This is a simple 4-line change that will eliminate the auto-zoom issue on all mobile devices (particularly iOS Safari) while keeping the inputs looking virtually identical.
