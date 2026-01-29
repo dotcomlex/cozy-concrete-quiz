@@ -1,8 +1,11 @@
 
-# Add Hero Image Background to Testimonials Section
+# Fix Mobile Auto-Zoom on Input Fields
 
-## Overview
-Replace the current dark gradient background of the testimonials section with the hero image (`hero-colorado-home.png`), adding a dark overlay to ensure all text remains readable.
+## The Problem
+On iOS Safari, when you tap an input field with a font size smaller than 16px, the browser automatically zooms in to make the text easier to read. Your quiz inputs currently use `text-[15px]` which triggers this behavior.
+
+## The Solution
+Change the font size of all input fields from `text-[15px]` to `text-base` (which equals 16px). This prevents iOS from auto-zooming while maintaining a clean, readable appearance.
 
 ---
 
@@ -10,71 +13,65 @@ Replace the current dark gradient background of the testimonials section with th
 
 | File | Change |
 |------|--------|
-| `src/components/ReviewsSection.tsx` | Add hero image background with overlay |
+| `src/components/Quiz.tsx` | Update font size on 4 input fields from `text-[15px]` to `text-base` |
 
 ---
 
-## Implementation Details
+## Code Changes
 
-### 1. Import the hero image (line 2)
-
-```tsx
-import heroImage from "@/assets/hero-colorado-home.png";
-```
-
-### 2. Update the section structure (line 124)
-
-Replace the simple section with a relative positioned section containing the background image and overlay:
+### 1. ZIP Code Input (line 462)
 
 ```tsx
 // Before:
-<section className="py-16 lg:py-24 section-gradient-dark">
-  <div className="container mx-auto px-4">
+className="pl-10 h-12 text-[15px] rounded-xl border-2 focus:border-primary"
 
 // After:
-<section className="py-16 lg:py-24 relative overflow-hidden">
-  {/* Background image with overlay */}
-  <div className="absolute inset-0">
-    <img 
-      src={heroImage} 
-      alt="" 
-      className="w-full h-full object-cover"
-      loading="lazy"
-    />
-    <div className="absolute inset-0 bg-black/75" />
-  </div>
-  
-  <div className="relative z-10 container mx-auto px-4">
+className="pl-10 h-12 text-base rounded-xl border-2 focus:border-primary"
 ```
 
-### 3. Close the wrapper div properly (line 197)
+### 2. Name Input (line 534)
 
 ```tsx
 // Before:
-      </div>
-    </section>
+className={`pl-10 h-12 text-[15px] rounded-xl border-2 transition-all ${...}`}
 
 // After:
-      </div>
-    </div>
-  </section>
+className={`pl-10 h-12 text-base rounded-xl border-2 transition-all ${...}`}
+```
+
+### 3. Phone Input (line 556)
+
+```tsx
+// Before:
+className={`pl-10 h-12 text-[15px] rounded-xl border-2 transition-all ${...}`}
+
+// After:
+className={`pl-10 h-12 text-base rounded-xl border-2 transition-all ${...}`}
+```
+
+### 4. Email Input (line 582)
+
+```tsx
+// Before:
+className={`pl-10 h-12 text-[15px] rounded-xl border-2 transition-all ${...}`}
+
+// After:
+className={`pl-10 h-12 text-base rounded-xl border-2 transition-all ${...}`}
 ```
 
 ---
 
-## Visual Result
+## Why This Works
 
-| Element | Before | After |
-|---------|--------|-------|
-| Background | Dark gradient (`section-gradient-dark`) | Hero image with 75% dark overlay |
-| Text visibility | White text on dark | White text on dark overlay (fully readable) |
-| Image | None | Same Colorado home image from hero |
+| Font Size | iOS Behavior |
+|-----------|--------------|
+| Less than 16px | Auto-zooms on focus |
+| 16px or larger | No zoom |
+
+`text-base` in Tailwind equals `font-size: 1rem` which is 16px by default, exactly at the threshold to prevent iOS auto-zoom.
 
 ---
 
-## Key Details
+## Summary
 
-- **Overlay opacity**: Using `bg-black/75` (75% black) ensures strong contrast for white text
-- **Image loading**: Set to `lazy` since it's below the fold
-- **Alt text**: Empty since it's decorative
-- **z-index**: Content uses `z-10` to sit above the background layer
+This is a simple 4-line change that will eliminate the auto-zoom issue on all mobile devices (particularly iOS Safari) while keeping the inputs looking virtually identical.
