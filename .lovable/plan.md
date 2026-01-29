@@ -1,77 +1,92 @@
 
-# Fix Disqualification Screen Persistence Bug
 
-## The Problem
+# Update ReviewsSection with Enhanced Content
 
-When a user:
-1. Enters an invalid (non-Colorado) ZIP code
-2. Sees the disqualification screen
-3. Goes back to step 4 and enters a valid Colorado ZIP
-4. Proceeds through to successful submission
+## Summary
 
-The disqualification screen **still shows** along with the success screen because `isDisqualified` never gets reset to `false`.
-
-Looking at the screenshot, ZIP 80234 (valid Denver area code) is showing on the disqualification screen after successful submission.
+Update the ReviewsSection with a more impactful headline, emotional subheadline, and 12 detailed customer reviews. Since only 9 avatars exist (avatar-1 through avatar-9), reviews 10-12 will reuse avatars 1-3 respectively.
 
 ---
 
-## Root Cause
+## Changes Overview
 
-Two issues in `Quiz.tsx`:
-
-1. **`isDisqualified` never resets** - When a valid ZIP is entered after disqualification, only `setStep(5)` is called but `isDisqualified` stays `true`
-
-2. **Both screens can render simultaneously** - The conditions `{isSubmitted && ...}` and `{isDisqualified && ...}` are not mutually exclusive
+| File | What Changes |
+|------|--------------|
+| `src/components/ReviewsSection.tsx` | Update headlines, replace all 12 reviews with detailed versions |
 
 ---
 
-## The Fix
+## Missing Assets Notice
 
-| File | Change |
-|------|--------|
-| `src/components/Quiz.tsx` | Reset `isDisqualified` when valid ZIP entered, and add exclusion condition |
+The assets folder only has `avatar-1.jpg` through `avatar-9.jpg`. The user requested `avatar-10.jpg`, `avatar-11.jpg`, and `avatar-12.jpg`, but these don't exist. I'll use existing avatars for reviews 10-12 to avoid broken images.
 
 ---
 
-## Code Changes
+## Technical Changes
 
-### 1. Reset `isDisqualified` when valid ZIP is entered (lines 82-90)
+### 1. Update Headline (lines 139-144)
 
-Update `handleNext` to clear the disqualification state:
-
+**Current:**
 ```tsx
-const handleNext = () => {
-  if (step === 4 && data.zipCode.length >= 5) {
-    if (isColoradoZipCode(data.zipCode)) {
-      setIsDisqualified(false); // Reset if user corrected their ZIP
-      setStep(5);
-    } else {
-      setIsDisqualified(true);
-    }
-  }
-};
+Why 100+ Homeowners Choose 14er
+Hear from families who transformed their homes with 14er
 ```
 
-### 2. Update disqualification screen condition (line 699)
-
-Add `!isSubmitted` to prevent both screens showing:
-
+**New:**
 ```tsx
-{isDisqualified && !isSubmitted && (
+This Is Why Colorado Homeowners Trust Us With Their Most Important Investment
+Real stories from real families who transformed their homes—and their lives.
 ```
 
+### 2. Replace Reviews Array (lines 19-104)
+
+Replace all 12 reviews with much more detailed versions:
+- Each review now has 4-6 sentences with specific details
+- Mentions materials, timelines, square footage, specific features
+- Covers variety: kitchens, bathrooms, basements, garage conversion
+- Problem-to-solution storytelling format
+- Unique avatars for reviews 1-9, reused avatars for 10-12
+
+### 3. Update Review Card Text Display (line 155)
+
+Since reviews are now much longer, consider adjusting the `line-clamp-6` to show more text or keeping it for consistency.
+
 ---
 
-## Why This Fixes It
+## Review Summary
 
-| Scenario | Before Fix | After Fix |
-|----------|------------|-----------|
-| Enter wrong ZIP → See disqualification | Works | Works |
-| Enter wrong ZIP → Go back → Enter correct ZIP → Submit | Disqualification screen persists with success | Disqualification clears, only success shows |
-| Enter correct ZIP first time | Works | Works |
+| # | Name | Project Type | Avatar |
+|---|------|--------------|--------|
+| 1 | Michael R. | Kitchen renovation | avatar1 |
+| 2 | Sarah M. | Bathroom remodel | avatar2 |
+| 3 | James T. | Basement finish | avatar3 |
+| 4 | Linda K. | Kitchen + bath combo | avatar4 |
+| 5 | David & Rachel P. | Garage conversion | avatar5 |
+| 6 | Carlos G. | Master bathroom | avatar6 |
+| 7 | Jennifer & Tom H. | Basement remodel | avatar7 |
+| 8 | Robert S. | Repeat customer (3 projects) | avatar8 |
+| 9 | Lisa W. | Kitchen renovation | avatar9 |
+| 10 | Kevin & Amy D. | Two bathroom remodel | avatar1 (reused) |
+| 11 | Patricia N. | Basement guest suite | avatar2 (reused) |
+| 12 | Marcus B. | Kitchen remodel | avatar3 (reused) |
 
 ---
 
-## Result
+## What Changes
 
-Users who correct their ZIP code will no longer see the "We Only Serve Colorado" screen lingering after successful form submission.
+- Headline: More emotional, emphasizes trust and investment
+- Subheadline: Personal, focuses on transformation
+- Reviews: 4-6x longer with specific project details
+- Avatar assignments: Fixed so Carlos G., Lisa W., etc. have unique avatars (no duplicates in first 9)
+
+---
+
+## What Stays the Same
+
+- Overall component structure
+- Carousel functionality
+- Card styling and layout
+- Google verified badge
+- Star ratings
+- Navigation buttons
+
