@@ -1,92 +1,100 @@
 
 
-# Update ReviewsSection with Enhanced Content
+# Mobile-Optimize Reviews Section + Generate Gender-Matched Avatars
 
 ## Summary
 
-Update the ReviewsSection with a more impactful headline, emotional subheadline, and 12 detailed customer reviews. Since only 9 avatars exist (avatar-1 through avatar-9), reviews 10-12 will reuse avatars 1-3 respectively.
+Two major changes:
+1. Remove `line-clamp-6` and add responsive mobile optimizations throughout the ReviewsSection
+2. Generate 12 unique avatar images matching each reviewer's gender using AI image generation
 
 ---
 
-## Changes Overview
+## Part 1: Mobile Optimizations
 
-| File | What Changes |
-|------|--------------|
-| `src/components/ReviewsSection.tsx` | Update headlines, replace all 12 reviews with detailed versions |
+### Changes to `src/components/ReviewsSection.tsx`
+
+| Element | Current | After (Mobile/Desktop) |
+|---------|---------|------------------------|
+| Section padding | `py-16 lg:py-24` | `py-12 sm:py-16 lg:py-24` |
+| Headline text | `text-2xl sm:text-3xl lg:text-4xl` | `text-xl sm:text-2xl lg:text-4xl leading-tight` |
+| Subheadline | `text-base` | `text-sm sm:text-base px-4` |
+| Grid gaps | `gap-5` | `gap-4 sm:gap-5` |
+| Card padding | `p-6` | `p-5 sm:p-6 h-full flex flex-col` |
+| Quote icon | `w-8 h-8 mb-4` | `w-6 h-6 sm:w-8 sm:h-8 mb-3 sm:mb-4` |
+| Review text | `line-clamp-6 text-sm` | `text-xs sm:text-sm` (NO line-clamp) |
+| Stars | `w-4 h-4` | `w-3.5 h-3.5 sm:w-4 sm:h-4` |
+| Avatar | `w-12 h-12` | `w-10 h-10 sm:w-12 sm:h-12` |
+| Name text | `text-sm` | `text-xs sm:text-sm` |
+| Location | `text-xs` | `text-[10px] sm:text-xs` |
+| Verified badge | `text-xs` | `text-[10px] sm:text-xs` |
+| Nav buttons | `w-10 h-10` | `w-9 h-9 sm:w-10 sm:h-10` |
 
 ---
 
-## Missing Assets Notice
+## Part 2: Generate 12 Unique Gender-Matched Avatars
 
-The assets folder only has `avatar-1.jpg` through `avatar-9.jpg`. The user requested `avatar-10.jpg`, `avatar-11.jpg`, and `avatar-12.jpg`, but these don't exist. I'll use existing avatars for reviews 10-12 to avoid broken images.
+### Reviewer Gender Analysis
+
+| # | Name | Gender | New Avatar File |
+|---|------|--------|-----------------|
+| 1 | Michael R. | Male | avatar-michael.jpg |
+| 2 | Sarah M. | Female | avatar-sarah.jpg |
+| 3 | James T. | Male | avatar-james.jpg |
+| 4 | Linda K. | Female | avatar-linda.jpg |
+| 5 | David & Rachel P. | Couple | avatar-david-rachel.jpg |
+| 6 | Carlos G. | Male | avatar-carlos.jpg |
+| 7 | Jennifer & Tom H. | Couple | avatar-jennifer-tom.jpg |
+| 8 | Robert S. | Male | avatar-robert.jpg |
+| 9 | Lisa W. | Female | avatar-lisa.jpg |
+| 10 | Kevin & Amy D. | Couple | avatar-kevin-amy.jpg |
+| 11 | Patricia N. | Female | avatar-patricia.jpg |
+| 12 | Marcus B. | Male | avatar-marcus.jpg |
+
+### AI Image Generation Prompts
+
+I'll generate professional headshot-style portraits:
+
+- **Males:** Professional headshot of a friendly middle-aged man, natural lighting, warm smile, residential home background blur, high quality photo
+- **Females:** Professional headshot of a friendly middle-aged woman, natural lighting, warm smile, residential home background blur, high quality photo  
+- **Couples:** Friendly middle-aged couple standing together, natural lighting, warm smiles, residential home background blur, high quality photo
 
 ---
 
-## Technical Changes
+## Implementation Steps
 
-### 1. Update Headline (lines 139-144)
+### Step 1: Generate 12 Avatar Images
+Using AI image generation (Nano banana model), create:
+- 5 male portraits (Michael, James, Carlos, Robert, Marcus)
+- 4 female portraits (Sarah, Linda, Lisa, Patricia)
+- 3 couple portraits (David & Rachel, Jennifer & Tom, Kevin & Amy)
 
-**Current:**
+### Step 2: Update Imports
+Replace the generic avatar imports with named ones:
 ```tsx
-Why 100+ Homeowners Choose 14er
-Hear from families who transformed their homes with 14er
+import avatarMichael from "@/assets/avatar-michael.jpg";
+import avatarSarah from "@/assets/avatar-sarah.jpg";
+// ... etc for all 12
 ```
 
-**New:**
+### Step 3: Update Reviews Array
+Assign each review its matching avatar:
 ```tsx
-This Is Why Colorado Homeowners Trust Us With Their Most Important Investment
-Real stories from real families who transformed their homes—and their lives.
+{ name: "Michael R.", avatar: avatarMichael, ... }
+{ name: "Sarah M.", avatar: avatarSarah, ... }
+// ... etc
 ```
 
-### 2. Replace Reviews Array (lines 19-104)
-
-Replace all 12 reviews with much more detailed versions:
-- Each review now has 4-6 sentences with specific details
-- Mentions materials, timelines, square footage, specific features
-- Covers variety: kitchens, bathrooms, basements, garage conversion
-- Problem-to-solution storytelling format
-- Unique avatars for reviews 1-9, reused avatars for 10-12
-
-### 3. Update Review Card Text Display (line 155)
-
-Since reviews are now much longer, consider adjusting the `line-clamp-6` to show more text or keeping it for consistency.
+### Step 4: Apply Mobile Optimizations
+Apply all the responsive class changes listed in Part 1.
 
 ---
 
-## Review Summary
+## Result
 
-| # | Name | Project Type | Avatar |
-|---|------|--------------|--------|
-| 1 | Michael R. | Kitchen renovation | avatar1 |
-| 2 | Sarah M. | Bathroom remodel | avatar2 |
-| 3 | James T. | Basement finish | avatar3 |
-| 4 | Linda K. | Kitchen + bath combo | avatar4 |
-| 5 | David & Rachel P. | Garage conversion | avatar5 |
-| 6 | Carlos G. | Master bathroom | avatar6 |
-| 7 | Jennifer & Tom H. | Basement remodel | avatar7 |
-| 8 | Robert S. | Repeat customer (3 projects) | avatar8 |
-| 9 | Lisa W. | Kitchen renovation | avatar9 |
-| 10 | Kevin & Amy D. | Two bathroom remodel | avatar1 (reused) |
-| 11 | Patricia N. | Basement guest suite | avatar2 (reused) |
-| 12 | Marcus B. | Kitchen remodel | avatar3 (reused) |
-
----
-
-## What Changes
-
-- Headline: More emotional, emphasizes trust and investment
-- Subheadline: Personal, focuses on transformation
-- Reviews: 4-6x longer with specific project details
-- Avatar assignments: Fixed so Carlos G., Lisa W., etc. have unique avatars (no duplicates in first 9)
-
----
-
-## What Stays the Same
-
-- Overall component structure
-- Carousel functionality
-- Card styling and layout
-- Google verified badge
-- Star ratings
-- Navigation buttons
+- Full review text visible on all devices (no truncation)
+- Compact, readable layout on mobile with smaller text and tighter spacing
+- Each reviewer has a unique avatar matching their gender
+- No recycled/duplicate avatars
+- Professional, authentic-looking headshots
 
