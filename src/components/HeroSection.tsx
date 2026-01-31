@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/hero-mountains-daylight.png";
+import heroImage from "@/assets/14er-mountain-hero.webp";
 import logo from "@/assets/14er-logo.png";
 import { Shield, CheckCircle, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ const HeroSection = () => {
             </h1>
 
             <p className="text-base sm:text-lg lg:text-xl text-white/95 leading-relaxed hero-text-shadow-strong max-w-2xl mx-auto">
-              Only a few spots are left. Fill this quick form to see if you qualify for a FREE consultation and $2,000 off your project!
+              Only a few spots are left. Click the button below to see if you qualify for a FREE consultation and $2,000 off your project!
             </p>
           </motion.div>
 
