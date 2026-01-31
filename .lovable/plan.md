@@ -1,10 +1,10 @@
 
 
-# Fix FAQ #6 - Remove False Deadline
+# Replace FAQ Footer with CTA Button
 
 ## Summary
 
-Remove the incorrect January 31st deadline from FAQ #6 answer to avoid displaying false/past information to users.
+Remove the "Still have questions?" text box and replace it with the same "Check Availability Now" CTA button used elsewhere on the homepage.
 
 ---
 
@@ -12,46 +12,75 @@ Remove the incorrect January 31st deadline from FAQ #6 answer to avoid displayin
 
 | File | Action | Changes |
 |------|--------|---------|
-| `src/components/FAQSection.tsx` | MODIFY | Remove deadline sentence from FAQ #6 answer |
+| `src/components/FAQSection.tsx` | MODIFY | Replace CTA footer div with styled button matching homepage pattern |
 
 ---
 
 ## Implementation
 
-### File: `src/components/FAQSection.tsx`
+### Step 1: Add Required Imports
 
-**Location:** Lines 35-39 (FAQ #6 in the faqs array)
+Add these imports at the top of FAQSection.tsx:
 
-**Current:**
 ```tsx
-{
-  question: "What does the $2,000 Winter Upgrade Program discount apply to?",
-  answer:
-    "The $2,000 discount applies to any remodeling project - kitchens, bathrooms, basements, or combinations. Projects must be scheduled by January 31st to qualify for this limited-time offer.",
-},
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+```
+
+### Step 2: Replace CTA Footer
+
+**Current (Lines 78-86):**
+```tsx
+{/* CTA Footer */}
+<div className="text-center mt-12 p-6 bg-slate-100 rounded-xl">
+  <p className="text-slate-700 font-medium mb-2">
+    Still have questions?
+  </p>
+  <p className="text-slate-600">
+    Call us at <span className="font-semibold text-primary">(720) 989-9883</span> or complete the form above to get your free consultation.
+  </p>
+</div>
 ```
 
 **New:**
 ```tsx
-{
-  question: "What does the $2,000 Winter Upgrade Program discount apply to?",
-  answer:
-    "The $2,000 discount applies to any remodeling project - kitchens, bathrooms, basements, or combinations.",
-},
+{/* Inline CTA - matches hero button style */}
+<div className="flex justify-center mt-10 sm:mt-12">
+  <motion.div className="animate-subtle-rock">
+    <Link to="/qualify">
+      <Button 
+        variant="cta" 
+        size="xl" 
+        className="group shadow-2xl text-lg px-8 py-6 animate-cta-glow"
+      >
+        Check Availability Now
+        <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+      </Button>
+    </Link>
+  </motion.div>
+</div>
 ```
 
 ---
 
-## What Changed
+## What Changes
 
-- Removed the sentence: "Projects must be scheduled by January 31st to qualify for this limited-time offer."
-- Keeps the factual statement about what the discount applies to
-- Eliminates false/past deadline from being displayed to users
+| Before | After |
+|--------|-------|
+| Gray box with "Still have questions?" text | Orange CTA button with arrow |
+| Phone number display | Link to /qualify page |
+| Static design | Animated button with glow effect |
 
 ---
 
 ## Verification
 
-- [ ] FAQ #6 no longer mentions January 31st
-- [ ] Answer still explains what the discount applies to (kitchens, bathrooms, basements, or combinations)
+- [ ] "Still have questions?" text removed
+- [ ] "Check Availability Now" button appears
+- [ ] Button has orange gradient and glow animation
+- [ ] Button links to /qualify page
+- [ ] Button has subtle rocking animation
+- [ ] Matches the CTA buttons in Gallery and Reviews sections
 
