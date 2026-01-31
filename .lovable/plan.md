@@ -1,193 +1,147 @@
 
-# Smart Qualification Quiz + Two-Page Architecture
+# Critical Copy & UX Fixes Based on User Feedback
 
-## Overview
+## Summary
 
-This is a major architectural change that transforms the quiz flow from an embedded component to a dedicated qualification page, adds smart timeline filtering, and brings back budget range questions with proper value thresholds.
+This update addresses multiple copy and UX issues found during testing: homepage headline improvements, qualify page enhancements, quiz flow refinements including removing the 5th budget option, friendlier timeline clarification language, and showing the actual ZIP code on the contact form.
 
 ---
 
-## Architecture Changes
+## Files to Modify
 
-### Current Structure
+| File | Changes |
+|------|---------|
+| `src/components/HeroSection.tsx` | Remove BREAKING badge, increase logo, update headline/subheadline, update CTA card copy, brighten image |
+| `src/pages/QualifyPage.tsx` | Remove "Qualification Form" badge, add live activity indicator, update headline |
+| `src/components/Quiz.tsx` | Remove 5th budget option, friendlier timeline clarification, single "Back to Home" button on disqualification, show actual ZIP in contact header |
+
+---
+
+## Part 1: Homepage Fixes (HeroSection.tsx)
+
+### 1.1 Remove "BREAKING" Badge
+Delete lines 45-50 containing the red "BREAKING" badge.
+
+### 1.2 Increase Logo Size
+**Current:** `h-16 sm:h-24 lg:h-36`
+**New:** `h-20 sm:h-28 lg:h-44`
+
+### 1.3 Update Headline
+**Current:**
 ```text
-/ (Index)
-├── HeroSection (contains embedded Quiz)
-├── TrustBadgesSection
-├── GallerySection
-├── ReviewsSection
-└── Footer
+New Winter Program Gives Colorado Homeowners $2,000 OFF Any Remodeling Project—Only 7 Spots Left
 ```
 
-### New Structure
+**New:**
 ```text
-/ (Index - Landing Page)
-├── HeroSection (CTA button → links to /qualify)
-├── TrustBadgesSection
-├── GallerySection
-├── ReviewsSection
-└── Footer
-
-/qualify (Quiz-Only Page)
-├── Simple Header (logo + back link)
-├── Quiz Component (full focus, no distractions)
-└── Minimal Footer
+Save $2,000 On Your Kitchen, Bathroom, Or Any Remodeling Project
 ```
+Add "LIMITED SPOTS AVAILABLE" badge below headline.
+
+### 1.4 Update Subheadline
+**Current:**
+```text
+Transform your kitchen, bathroom, or any space...Take a quick 5-question quiz...
+```
+
+**New:**
+```text
+Fill this quick form to see if you qualify for a free consultation and $2,000 off any remodeling project.
+```
+
+### 1.5 Update CTA Card
+- Add "LIMITED SPOTS" urgency badge at top
+- Change heading from "See If You Qualify" to "Save $2,000 On Your Remodel"
+- Update button text from "Start Qualification Quiz" to "Check Availability"
+- Redesign trust indicators to horizontal layout with cleaner styling
+- Add `whitespace-nowrap` to prevent text wrapping on mobile
+
+### 1.6 Brighten Hero Image
+Add `brightness-110` to the image and reduce overlay opacity.
 
 ---
 
-## New Quiz Flow (5 Questions + Smart Clarification)
+## Part 2: Qualify Page Fixes (QualifyPage.tsx)
 
-| Step | Question | Options | Logic |
-|------|----------|---------|-------|
-| 1 | Project Type | Kitchen / Bath / Both / Other | Auto-advance |
-| 2 | Timeline | ASAP / 30 days / 1-2 months / Not sure | If "Not sure" → Clarification screen |
-| 2b | Clarification | "Start within 60 days?" Yes/No | Yes → Continue, No → Disqualify |
-| 3 | Budget Range | $10-20K / $20-40K / $40-60K / $60K+ / Not sure | Auto-advance |
-| 4 | ZIP Code | Colorado validation | Manual continue |
-| 5 | Contact | Name + Phone + Email | Submit |
+### 2.1 Remove "Qualification Form" Badge
+Delete the badge element at lines 30-32.
 
----
+### 2.2 Add Live Activity Indicator
+Add pulsing dot with text: "8 people are checking availability right now"
 
-## Files to Create/Modify
+### 2.3 Update Headline
+**Current:** "See if you qualify for $2,000 off"
+**New:** "Save $2,000 On Your Remodel"
 
-| File | Action | Purpose |
-|------|--------|---------|
-| `src/pages/QualifyPage.tsx` | CREATE | New quiz-only page |
-| `src/App.tsx` | MODIFY | Add /qualify route |
-| `src/components/HeroSection.tsx` | MODIFY | Replace Quiz with CTA button |
-| `src/components/Quiz.tsx` | MODIFY | Add timeline clarification + update budget options |
-| `src/components/FloatingCTA.tsx` | MODIFY | Link to /qualify instead of scroll |
+### 2.4 Update Subheadline
+**Current:** "Answer a few quick questions to check your eligibility"
+**New:** "Answer a few quick questions to see if you qualify"
 
 ---
 
-## Technical Implementation Details
+## Part 3: Quiz Component Fixes (Quiz.tsx)
 
-### 1. Create QualifyPage.tsx (NEW FILE)
-
-A dedicated page with:
-- Simple header with logo and "Back to Home" link
-- Clean white/gray background (no hero image)
-- Centered Quiz component with heading
-- Minimal footer with security note
-
-### 2. Update App.tsx
-
-Add the new route:
-```tsx
-import QualifyPage from "./pages/QualifyPage";
-
-<Route path="/qualify" element={<QualifyPage />} />
-```
-
-### 3. Update HeroSection.tsx
-
-Replace the embedded `<Quiz />` with a CTA card:
-- "See If You Qualify" heading
-- Subtext explaining the 5-question quiz
-- "Start Qualification Quiz" button linking to /qualify
-- Trust indicators (60 seconds, 100+ homeowners)
-- Keep the trust strip below
-
-### 4. Update Quiz.tsx - Timeline Clarification
-
-Add new state:
-```tsx
-const [needsTimelineClarification, setNeedsTimelineClarification] = useState(false);
-const [timelineDisqualified, setTimelineDisqualified] = useState(false);
-```
-
-Modify timeline auto-advance logic:
-- If user selects "Not sure" → Show clarification screen
-- Clarification offers two options:
-  - "Yes, I want to start within 60 days" → Continue to budget
-  - "No, I'm planning further out" → Show timeline disqualification
-
-### 5. Update Quiz.tsx - Budget Options
-
-Replace current yes/no budget with specific ranges:
+### 3.1 Remove 5th Budget Option (Lines 614-619)
+Remove the "Not sure / Need guidance" option from the budget step. Only keep 4 options:
 - $10,000 - $20,000
 - $20,000 - $40,000
 - $40,000 - $60,000
 - $60,000+
-- Not sure / Need guidance
 
-Update `getBudgetLabel()` helper and webhook payload accordingly.
+Also update `getBudgetLabel()` helper to remove the "not-sure" case.
 
-### 6. Add Timeline Disqualification Screen
+### 3.2 Update Timeline Clarification Language (Lines 431-501)
+**Changes:**
+- "Quick Clarification" → "Quick Question"
+- "Would you like to move forward with a consultation?" → "Does that work for your timeline?"
+- "Yes, I want to start within 60 days" → "Yes, that works for me"
+- "Continue with qualification" → "Continue to next step"
+- "No, I'm planning further out" → "No, I need more time"
 
-New screen for users who are planning too far out:
-- "We're Booking Soon!" heading
-- Friendly message about 60-day focus
-- Action items: Save phone, bookmark site
-- Links to Gallery and Reviews sections
+### 3.3 Fix Timeline Disqualification Buttons (Lines 504-570)
+**Changes:**
+- Remove "Read Reviews" button
+- Change to single "Back to Home" button that links to `/`
+- Update heading from "We're Booking Soon!" to "Thanks For Your Interest!"
 
-### 7. Update FloatingCTA.tsx
+### 3.4 Show Actual ZIP Code on Contact Step (Lines 690-698)
+**Current:** "Your Zip Code Qualifies For This Offer!"
+**New:** "Congrats! Your Area ({data.zipCode}) Qualifies!"
 
-Change from scrolling to quiz to navigating:
-```tsx
-import { Link } from "react-router-dom";
-
-<Link to="/qualify">
-  <Button variant="cta">Claim $2,000 Discount</Button>
-</Link>
-```
-
----
-
-## Disqualification Screens Summary
-
-| Scenario | Screen | Message |
-|----------|--------|---------|
-| ZIP not in Colorado | "We Only Serve Colorado" | Existing - keep as-is |
-| Timeline too far out | "We're Booking Soon!" | New - friendly, keeps door open |
+Also update subheadline:
+**Current:** "...schedule your 100% free estimate."
+**New:** "...schedule your 100% free in-home consultation."
 
 ---
 
-## Webhook Payload Update
+## Visual Summary
 
-New budget_range values in payload:
-```tsx
-const getBudgetLabel = (budget: string): string => {
-  switch (budget) {
-    case "10-20k": return "$10,000 - $20,000";
-    case "20-40k": return "$20,000 - $40,000";
-    case "40-60k": return "$40,000 - $60,000";
-    case "60k+": return "$60,000+";
-    case "not-sure": return "Not sure / Need guidance";
-    default: return "";
-  }
-};
-```
+### Homepage Hero Before/After
 
----
+| Element | Before | After |
+|---------|--------|-------|
+| Badge | "🚨 BREAKING" | Removed |
+| Logo size | h-16/h-24/h-36 | h-20/h-28/h-44 |
+| Headline | "New Winter Program Gives..." | "Save $2,000 On Your Kitchen..." |
+| CTA button | "Start Qualification Quiz" | "Check Availability" |
+| Image | Dark overlay | Brightened with brightness-110 |
 
-## User Experience Flow
+### Quiz Flow Changes
 
-### Happy Path
-1. User lands on homepage → Sees CTA "See If You Qualify"
-2. Clicks button → Taken to /qualify page
-3. Answers 5 questions → Submits form
-4. Sees success screen with next steps
-
-### Timeline Clarification Path
-1. User selects "Not sure" on timeline
-2. Sees clarification: "We're booking within 60 days"
-3. Option A: "Yes, continue" → Proceeds to budget
-4. Option B: "No, planning further" → Friendly disqualification with helpful links
-
-### Out-of-State Path
-1. User enters non-Colorado ZIP
-2. Sees "We Only Serve Colorado" (existing behavior)
+| Step | Before | After |
+|------|--------|-------|
+| Budget options | 5 options | 4 options (removed "Not sure") |
+| Timeline clarification | Formal language | Friendly language |
+| Disqualification | 2 buttons (Gallery + Reviews) | 1 button (Back to Home) |
+| Contact header | Generic ZIP message | Shows actual ZIP code |
 
 ---
 
-## Benefits of This Approach
+## Benefits
 
-1. **Focused conversion** - Quiz page has zero distractions
-2. **Quality filtering** - Timeline clarification weeds out tire-kickers gracefully
-3. **Budget qualification** - Ranges starting at $10K filter low-value leads
-4. **Professional UX** - Two-page structure like HomeBuddy and other lead gen sites
-5. **Mobile optimized** - Clean, fast-loading quiz page
-6. **Door stays open** - Disqualified users get helpful next steps, may return later
-
+- Cleaner, more professional homepage without "BREAKING" urgency
+- Friendlier, less "qualification" focused language
+- Streamlined budget options (removes low-value "not sure" responses)
+- Single clear CTA on disqualification screen
+- Personalized contact step with actual ZIP code
+- Better mobile text wrapping with `whitespace-nowrap`
