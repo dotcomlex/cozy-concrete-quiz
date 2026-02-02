@@ -1,10 +1,10 @@
 
 
-# Replace FAQ Footer with CTA Button
+# Add Loading Screen to ZIP Code Auto-Advance
 
 ## Summary
 
-Remove the "Still have questions?" text box and replace it with the same "Check Availability Now" CTA button used elsewhere on the homepage.
+Add a 2.5-second loading screen with rotating verification messages between Step 4 (ZIP entry) and Step 5 (Contact Form) for Colorado ZIP codes only.
 
 ---
 
@@ -12,75 +12,194 @@ Remove the "Still have questions?" text box and replace it with the same "Check 
 
 | File | Action | Changes |
 |------|--------|---------|
-| `src/components/FAQSection.tsx` | MODIFY | Replace CTA footer div with styled button matching homepage pattern |
+| `src/components/Quiz.tsx` | MODIFY | Add loading state, CheckingMessages component, and loading screen UI |
 
 ---
 
-## Implementation
+## Implementation Steps
 
-### Step 1: Add Required Imports
+### Step 1: Add New State Variable
 
-Add these imports at the top of FAQSection.tsx:
+**Location:** Line 56 (after `errors` state)
 
+**Add:**
 ```tsx
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+const [isCheckingZip, setIsCheckingZip] = useState(false);
 ```
 
-### Step 2: Replace CTA Footer
+---
 
-**Current (Lines 78-86):**
+### Step 2: Add CheckingMessages Component
+
+**Location:** Before line 49 (before the Quiz component definition)
+
+**Add:**
 ```tsx
-{/* CTA Footer */}
-<div className="text-center mt-12 p-6 bg-slate-100 rounded-xl">
-  <p className="text-slate-700 font-medium mb-2">
-    Still have questions?
-  </p>
-  <p className="text-slate-600">
-    Call us at <span className="font-semibold text-primary">(720) 989-9883</span> or complete the form above to get your free consultation.
-  </p>
-</div>
+// Rotating messages for ZIP verification
+const CheckingMessages = ({ zipCode }: { zipCode: string }) => {
+  const [messageIndex, setMessageIndex] = useState(0);
+  
+  const messages = [
+    `Checking availability in ${zipCode}...`,
+    "Verifying service coverage...",
+    "Confirming project capacity...",
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMessageIndex((prev) => (prev + 1) % messages.length);
+    }, 800);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <motion.div
+      key={messageIndex}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+    >
+      <p className="text-base sm:text-lg font-medium text-foreground">
+        {messages[messageIndex]}
+      </p>
+      <p className="text-sm text-muted-foreground mt-2">
+        Please wait a moment...
+      </p>
+    </motion.div>
+  );
+};
+```
+
+---
+
+### Step 3: Modify handleNext Function
+
+**Location:** Lines 99-108
+
+**Current:**
+```tsx
+const handleNext = () => {
+  if (step === 4 && data.zipCode.length >= 5) {
+    if (isColoradoZipCode(data.zipCode)) {
+      setIsDisqualified(false);
+      setStep(5);
+    } else {
+      setIsDisqualified(true);
+    }
+  }
+};
 ```
 
 **New:**
 ```tsx
-{/* Inline CTA - matches hero button style */}
-<div className="flex justify-center mt-10 sm:mt-12">
-  <motion.div className="animate-subtle-rock">
-    <Link to="/qualify">
-      <Button 
-        variant="cta" 
-        size="xl" 
-        className="group shadow-2xl text-lg px-8 py-6 animate-cta-glow"
-      >
-        Check Availability Now
-        <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-      </Button>
-    </Link>
-  </motion.div>
-</div>
+const handleNext = () => {
+  if (step === 4 && data.zipCode.length >= 5 && !isCheckingZip) {
+    if (isColoradoZipCode(data.zipCode)) {
+      setIsDisqualified(false);
+      setIsCheckingZip(true);
+      
+      // Show loading for 2.5 seconds, then advance
+      setTimeout(() => {
+        setIsCheckingZip(false);
+        setStep(5);
+      }, 2500);
+    } else {
+      setIsDisqualified(true);
+    }
+  }
+};
 ```
 
 ---
 
-## What Changes
+### Step 4: Update Step 4 Condition
 
-| Before | After |
-|--------|-------|
-| Gray box with "Still have questions?" text | Orange CTA button with arrow |
-| Phone number display | Link to /qualify page |
-| Static design | Animated button with glow effect |
+**Location:** Line 621
+
+**Current:**
+```tsx
+{step === 4 && !isSubmitted && (
+```
+
+**New:**
+```tsx
+{step === 4 && !isSubmitted && !isCheckingZip && !isDisqualified && (
+```
 
 ---
 
-## Verification
+### Step 5: Add Loading Screen
 
-- [ ] "Still have questions?" text removed
-- [ ] "Check Availability Now" button appears
-- [ ] Button has orange gradient and glow animation
-- [ ] Button links to /qualify page
-- [ ] Button has subtle rocking animation
-- [ ] Matches the CTA buttons in Gallery and Reviews sections
+**Location:** After Step 4 block (line 667), before Step 5 block (line 669)
+
+**Add:**
+```tsx
+{/* ZIP Code Checking Loader */}
+{isCheckingZip && !isSubmitted && !isDisqualified && (
+  <motion.div
+    key="checking-zip"
+    variants={cardVariants}
+    initial="enter"
+    animate="center"
+    exit="exit"
+    transition={{ duration: 0.25 }}
+    className="py-8 text-center"
+  >
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+      className="w-16 h-16 mx-auto mb-6"
+    >
+      <div className="w-full h-full rounded-full border-4 border-slate-200 border-t-primary" />
+    </motion.div>
+    
+    <CheckingMessages zipCode={data.zipCode} />
+  </motion.div>
+)}
+```
+
+---
+
+## Flow Comparison
+
+```text
+CURRENT FLOW:
+Step 4: Type "80233" → Click Continue → Instant jump to Step 5
+
+NEW FLOW:
+Step 4: Type "80233" → Click Continue
+   ↓
+LOADING (2.5s): "Checking availability in 80233..."
+   ↓
+Step 5: "Congrats! Your Area Qualifies!"
+```
+
+---
+
+## What Does NOT Change
+
+- Existing Step 4 UI - unchanged
+- Existing Step 5 UI - unchanged
+- ZIP validation logic - unchanged  
+- Disqualification flow for non-Colorado ZIPs - unchanged
+- All other quiz steps - unchanged
+
+## What DOES Change
+
+- Loading screen appears between Step 4 and Step 5
+- 2.5 second delay with rotating messages
+- Only for Colorado ZIP codes
+- Adds perceived value/verification step
+
+---
+
+## Testing Checklist
+
+- [ ] Type Colorado ZIP (80233) → See loading → Auto-advance to Step 5
+- [ ] Loading shows rotating messages
+- [ ] Non-Colorado ZIP → Shows disqualification (no loading)
+- [ ] Back button still works during Step 4
+- [ ] Everything else works exactly as before
 
