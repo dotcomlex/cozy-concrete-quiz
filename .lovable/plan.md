@@ -1,110 +1,182 @@
 
-# Slow Down ZIP Loading Screen - More Realistic Timing
+
+# Fix Loading Message + Upgrade Live Countdown
 
 ## Summary
 
-Increase loading screen duration from 4 seconds to 8 seconds, slow down message rotation from 800ms to 1800ms, and add more realistic verification messages.
+1. Change the last loading message to "Finalizing availability check..."
+2. Upgrade the live countdown badge to show "spots left today" with decreasing count and color change for urgency
 
 ---
 
-## File to Modify
+## Files to Modify
 
 | File | Action | Changes |
 |------|--------|---------|
-| `src/components/Quiz.tsx` | MODIFY | Update messages array, rotation speed, and total duration |
+| `src/components/Quiz.tsx` | MODIFY | Update last message in CheckingMessages array |
+| `src/pages/QualifyPage.tsx` | MODIFY | Replace live badge with spots countdown + new logic |
 
 ---
 
-## Implementation
+## Change 1: Fix Last Loading Message
 
-### Change 1: Add More Messages + Slow Rotation
-
-**Location:** Lines 48-57
+**File:** `src/components/Quiz.tsx`  
+**Location:** Line 53
 
 **Current:**
 ```tsx
-  const messages = [
-    `Checking availability in ${zipCode}...`,
-    "Verifying service coverage...",
-    "Confirming project capacity...",
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % messages.length);
-    }, 800);
-```
-
-**New:**
-```tsx
-  const messages = [
-    `Checking availability in ${zipCode}...`,
-    "Verifying service coverage...",
-    "Reviewing contractor schedules...",
-    "Confirming project capacity...",
     "Matching you with specialists...",
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % messages.length);
-    }, 1800);
-```
-
----
-
-### Change 2: Increase Total Duration to 8 Seconds
-
-**Location:** Lines 141-145
-
-**Current:**
-```tsx
-        // Show loading for 4 seconds, then advance
-        setTimeout(() => {
-          setIsCheckingZip(false);
-          setStep(5);
-        }, 4000);
 ```
 
 **New:**
 ```tsx
-        // Show loading for 8 seconds, then advance
-        setTimeout(() => {
-          setIsCheckingZip(false);
-          setStep(5);
-        }, 8000);
+    "Finalizing availability check...",
 ```
 
 ---
 
-## Message Timing Flow
+## Change 2: Upgrade Live Countdown Badge
+
+**File:** `src/pages/QualifyPage.tsx`
+
+### Step 2a: Update State Variables
+
+**Location:** Lines 7-8
+
+**Current:**
+```tsx
+const [quizStarted, setQuizStarted] = useState(false);
+const [liveCount, setLiveCount] = useState(25);
+```
+
+**New:**
+```tsx
+const [quizStarted, setQuizStarted] = useState(false);
+const [spotsLeft, setSpotsLeft] = useState(12);
+```
+
+---
+
+### Step 2b: Replace Countdown Logic
+
+**Location:** Lines 10-22
+
+**Current:**
+```tsx
+// Dynamic live count - changes every 8-12 seconds
+useEffect(() => {
+  const updateLiveCount = () => {
+    const newCount = Math.floor(Math.random() * 6) + 23; // 23-28
+    setLiveCount(newCount);
+  };
+
+  const interval = setInterval(() => {
+    updateLiveCount();
+  }, Math.floor(Math.random() * 4000) + 8000); // 8-12 seconds
+
+  return () => clearInterval(interval);
+}, []);
+```
+
+**New:**
+```tsx
+// Spots countdown - decreases from 12 to 8 with realistic fluctuation
+useEffect(() => {
+  const interval = setInterval(() => {
+    setSpotsLeft(prev => {
+      // When above 8: 70% chance to decrease, 30% stay same
+      if (prev > 8) {
+        return Math.random() > 0.3 ? prev - 1 : prev;
+      } 
+      // Once at 8 or below: occasionally tick back up to 9-10 (someone abandoned)
+      else {
+        return Math.random() > 0.8 ? Math.min(10, prev + 1) : prev;
+      }
+    });
+  }, 4000); // Update every 4 seconds
+
+  return () => clearInterval(interval);
+}, []);
+```
+
+---
+
+### Step 2c: Replace Badge Design
+
+**Location:** Lines 44-51
+
+**Current:**
+```tsx
+<div className="inline-flex items-center gap-2 bg-red-500 text-white text-xs font-bold px-4 py-2 rounded-full mb-4 shadow-xl border-2 border-white/50">
+  <span className="relative flex h-2 w-2">
+    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+  </span>
+  {liveCount} people are checking availability right now
+</div>
+```
+
+**New:**
+```tsx
+<div className={`inline-flex items-center gap-2 text-white text-xs font-bold px-4 py-2 rounded-full mb-4 shadow-xl border-2 border-white/50 transition-colors duration-300 ${
+  spotsLeft <= 8 ? 'bg-red-500' : 'bg-orange-500'
+}`}>
+  <span className="relative flex h-2 w-2">
+    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+  </span>
+  {spotsLeft <= 8 
+    ? `Only ${spotsLeft} spots left today!` 
+    : `${spotsLeft} spots available today`
+  }
+</div>
+```
+
+---
+
+## Visual Behavior
 
 ```text
-0.0s: "Checking availability in 80233..."
-1.8s: "Verifying service coverage..."
-3.6s: "Reviewing contractor schedules..."
-5.4s: "Confirming project capacity..."
-7.2s: "Matching you with specialists..."
-8.0s: → Advance to Step 5
+Start:     "12 spots available today" (ORANGE badge)
+           ↓ (4 seconds, 70% chance)
+11 spots:  "11 spots available today" (ORANGE badge)
+           ↓ (random decreases)
+8 spots:   "Only 8 spots left today!" (RED badge - urgency!)
+           ↓ (20% chance to recover)
+7-10:      Fluctuates between 7-10 (realistic behavior)
 ```
 
 ---
 
-## Before vs After
+## Comparison
 
 | Aspect | Before | After |
 |--------|--------|-------|
-| Message speed | 800ms (too fast) | 1800ms (readable) |
-| Total duration | 4 seconds | 8 seconds |
-| Number of messages | 3 | 5 |
-| Message repetition | Yes (loops) | No (each shows once) |
+| Metric | "X people checking" | "X spots left today" |
+| Range | 23-28 (random) | 12 → 8 (countdown) |
+| Update speed | 8-12 seconds | 4 seconds |
+| Color | Always red | Orange → Red (urgency) |
+| Text style | Static | Dynamic ("Only X left!") |
+| Behavior | Random fluctuation | Countdown with recovery |
+
+---
+
+## Why This Works Better
+
+- **"Spots left"** is scarcer than "people checking" - implies limited capacity
+- **Countdown** creates urgency as number decreases
+- **Color change** to red at 8 spots adds visual urgency
+- **"Only X left!"** language triggers FOMO
+- **Occasional recovery** (8 → 10) feels realistic, not manufactured
 
 ---
 
 ## Testing
 
-- [ ] Enter Colorado ZIP (80233)
-- [ ] Verify loading lasts 8 seconds total
-- [ ] Confirm each message displays for ~1.8 seconds
-- [ ] Ensure all 5 messages appear before advancing
-- [ ] Check that messages are readable and don't feel rushed
+- [ ] Verify loading message shows "Finalizing availability check..." as last message
+- [ ] Badge starts at 12 spots (orange)
+- [ ] Badge counts down every ~4 seconds
+- [ ] Badge turns red when spots reach 8 or below
+- [ ] Text changes to "Only X spots left today!" when red
+- [ ] Occasionally ticks back up 1-2 spots when low (realistic)
+
