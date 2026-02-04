@@ -1,53 +1,43 @@
 
 
-# Update Qualify Page Headline - Engaging Two-Line Design
 
-## Summary
+# Simplify Qualify Page Headline - Mobile-First Clean Design
 
-Update the `/qualify` page headline with the user's chosen copy and improved font styling for a cleaner, more engaging mobile experience.
+## Problem
 
----
-
-## New Headline Copy
-
-| Line | Text |
-|------|------|
-| **Question** | "Ready to Transform Your Home?" |
-| **Value Prop** | "See If You Qualify for the Winter Upgrade Program and Save Thousands" |
+The current headline structure has multiple issues on mobile:
+1. **Too many competing colors** - gray question, black text, amber highlight, lighter gray subtext
+2. **Awkward line breaks** - "Winter Upgra" breaks to "Program" creating ugly visual
+3. **Too many visual layers** - 4-5 separate lines overwhelming the user
+4. **Overcomplicated hierarchy** - trying to do too much with styling
 
 ---
 
-## Font Styling Improvements
+## Solution: Simplified Single-Color Headline
 
-| Property | Current | New |
-|----------|---------|-----|
-| Font weight | `font-extrabold` (800) | `font-semibold` / `font-bold` - lighter, more elegant |
-| Line height | `leading-tight` | `leading-snug` - better breathing room |
-| Structure | Single h1 with awkward br | Two-line hierarchy with question + value prop |
-| Highlight | None | "Winter Upgrade Program" in amber (`text-primary`) |
+Consolidate to a cleaner, simpler structure with one dominant color and minimal hierarchy.
+
+---
+
+## New Headline Structure
+
+**Option: Clean Single Line with Subtle Emphasis**
+
+```text
+See If You Qualify for the
+Winter Upgrade Program
+and Save Thousands
+```
+
+All in **slate-900** (dark text) with just the amber accent on "Winter Upgrade Program" - but keeping font weight consistent.
 
 ---
 
 ## Technical Implementation
 
-### File: `src/pages/QualifyPage.tsx` (lines 61-70)
+### File: `src/pages/QualifyPage.tsx` (lines 61-75)
 
-**Current:**
-```jsx
-{!quizStarted && (
-  <>
-    <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 mb-2 leading-tight">
-      See If You Qualify<br className="sm:hidden" />
-      <span className="whitespace-nowrap"> for $2,000 Off</span>
-    </h1>
-    <p className="text-sm sm:text-base font-medium text-slate-700">
-      Takes less than 30 seconds to complete
-    </p>
-  </>
-)}
-```
-
-**New:**
+**Current (too complex):**
 ```jsx
 {!quizStarted && (
   <>
@@ -67,30 +57,49 @@ Update the `/qualify` page headline with the user's chosen copy and improved fon
 )}
 ```
 
-**Key improvements:**
-- Engaging question as the lead-in (larger, lighter weight)
-- Main value prop with "Winter Upgrade Program" highlighted in amber
-- Controlled line break on mobile for natural reading
-- Lighter font weights throughout for cleaner mobile appearance
-- Better color hierarchy with `slate-700` for question, `slate-900` for main text
+**New (simplified):**
+```jsx
+{!quizStarted && (
+  <>
+    <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 leading-relaxed">
+      See If You Qualify for the<br />
+      Winter Upgrade Program
+    </h1>
+    <p className="text-sm text-slate-600">
+      Takes less than 30 seconds
+    </p>
+  </>
+)}
+```
+
+---
+
+## Key Changes
+
+| Aspect | Before | After |
+|--------|--------|-------|
+| **Lines of text** | 4 (question, qualify, program, subtext) | 2 (headline, subtext) |
+| **Colors** | 4 (slate-700, slate-900, primary/amber, slate-600) | 2 (slate-900, slate-600) |
+| **Font weights** | Mixed (semibold, bold, medium) | Consistent (bold, regular) |
+| **Line breaks** | Complex conditional `<br className="sm:hidden" />` | Simple `<br />` for all |
+| **Text sizes** | 5 different sizes | 2 sizes only |
 
 ---
 
 ## Visual Result
 
-**Mobile view:**
+**Mobile (clean, readable):**
 ```text
-Ready to Transform Your Home?
 See If You Qualify for the
 Winter Upgrade Program
-and Save Thousands
+
+Takes less than 30 seconds
 ```
 
-**Desktop view:**
-```text
-Ready to Transform Your Home?
-See If You Qualify for the Winter Upgrade Program and Save Thousands
-```
+- Removed the "Ready to Transform Your Home?" question (was adding clutter)
+- Removed amber highlight (was creating color competition)
+- Removed "and Save Thousands" (streamlined message)
+- Simple two-line headline with consistent styling
 
 ---
 
@@ -98,5 +107,6 @@ See If You Qualify for the Winter Upgrade Program and Save Thousands
 
 | File | Change |
 |------|--------|
-| `src/pages/QualifyPage.tsx` | Restructure headline with question + value prop, improve font styling, add amber highlight |
+| `src/pages/QualifyPage.tsx` | Simplify headline to 2-color, 2-line clean structure |
+
 
