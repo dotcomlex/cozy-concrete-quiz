@@ -765,7 +765,7 @@ const Quiz = ({ onStart }: QuizProps) => {
                       placeholder="Name"
                       value={data.firstName}
                       onChange={(e) => {
-                        setData({ ...data, firstName: e.target.value });
+                        setData(prev => ({ ...prev, firstName: e.target.value }));
                         if (errors.firstName) setErrors({ ...errors, firstName: undefined });
                       }}
                       className={`pl-10 h-12 text-base rounded-xl border-2 transition-all ${
@@ -787,7 +787,7 @@ const Quiz = ({ onStart }: QuizProps) => {
                       placeholder="(555) 123-4567"
                       value={data.phone}
                       onChange={(e) => {
-                        setData({ ...data, phone: formatPhoneNumber(e.target.value) });
+                        setData(prev => ({ ...prev, phone: formatPhoneNumber(e.target.value) }));
                         if (errors.phone) setErrors({ ...errors, phone: undefined });
                       }}
                       className={`pl-10 h-12 text-base rounded-xl border-2 transition-all ${
@@ -813,7 +813,7 @@ const Quiz = ({ onStart }: QuizProps) => {
                       placeholder="Email"
                       value={data.email}
                       onChange={(e) => {
-                        setData({ ...data, email: e.target.value });
+                        setData(prev => ({ ...prev, email: e.target.value }));
                         if (errors.email) setErrors({ ...errors, email: undefined });
                       }}
                       className={`pl-10 h-12 text-base rounded-xl border-2 transition-all ${
