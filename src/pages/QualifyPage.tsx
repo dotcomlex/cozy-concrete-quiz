@@ -61,7 +61,7 @@ const [quizStarted, setQuizStarted] = useState(false);
               {!quizStarted && (
                 <>
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
-                    Check Availability
+                    See If You Qualify for $2,000 Off
                   </h1>
                   <p className="text-sm sm:text-base font-medium text-slate-700">
                     Takes less than 30 seconds to complete

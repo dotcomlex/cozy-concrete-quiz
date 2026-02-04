@@ -66,13 +66,13 @@ const HeroSection = () => {
             {/* Button with subtle rocking animation */}
             <motion.div className="animate-subtle-rock">
               <Link to="/qualify">
-                <Button 
-                  variant="cta" 
-                  size="xl" 
-                  className="group shadow-2xl text-lg px-8 py-6 animate-cta-glow"
-                >
-                  Check Availability Now
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <Button 
+                    variant="cta" 
+                    size="xl" 
+                    className="group shadow-2xl text-lg px-8 py-6 animate-cta-glow"
+                  >
+                    See If You Qualify
+                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
             </motion.div>

@@ -24,7 +24,7 @@ const FinalCTASection = () => {
         </p>
 
         <Button variant="cta" size="xl" onClick={scrollToTop} className="group">
-          Claim My Free Consultation
+          See If You Qualify
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </Button>
 
