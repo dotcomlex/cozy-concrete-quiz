@@ -1,64 +1,96 @@
 
 
-# Fix Missed CTA Button and Mobile Headline Sizing
+# Update Qualify Page Headline - Engaging Two-Line Design
 
 ## Summary
 
-Fix two issues: (1) The FAQ section CTA button still says "Check Availability Now" - it was missed in the previous update, and (2) the /qualify page headline is wrapping awkwardly on mobile, creating a poor visual appearance.
+Update the `/qualify` page headline with the user's chosen copy and improved font styling for a cleaner, more engaging mobile experience.
 
 ---
 
-## Issues Identified
+## New Headline Copy
 
-| Issue | Location | Problem |
-|-------|----------|---------|
-| Missed CTA update | `FAQSection.tsx` line 85 | Still shows "Check Availability Now" |
-| Headline wrapping | `QualifyPage.tsx` line 63-64 | "See If You Qualify for $2,000 Off" breaks awkwardly on small screens |
+| Line | Text |
+|------|------|
+| **Question** | "Ready to Transform Your Home?" |
+| **Value Prop** | "See If You Qualify for the Winter Upgrade Program and Save Thousands" |
 
 ---
 
-## Solutions
+## Font Styling Improvements
 
-### 1. Update FAQ Section CTA Button
+| Property | Current | New |
+|----------|---------|-----|
+| Font weight | `font-extrabold` (800) | `font-semibold` / `font-bold` - lighter, more elegant |
+| Line height | `leading-tight` | `leading-snug` - better breathing room |
+| Structure | Single h1 with awkward br | Two-line hierarchy with question + value prop |
+| Highlight | None | "Winter Upgrade Program" in amber (`text-primary`) |
 
-**File**: `src/components/FAQSection.tsx` (line 85)
+---
 
-Change from:
-```jsx
-Check Availability Now
-```
+## Technical Implementation
 
-To:
-```jsx
-See If You Qualify
-```
-
-### 2. Fix Mobile Headline Sizing
-
-The current headline text is too long for mobile screens, causing an ugly wrap where "$2,000 Off" breaks to a second line awkwardly.
-
-**File**: `src/pages/QualifyPage.tsx` (lines 63-65)
+### File: `src/pages/QualifyPage.tsx` (lines 61-70)
 
 **Current:**
 ```jsx
-<h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
-  See If You Qualify for $2,000 Off
-</h1>
+{!quizStarted && (
+  <>
+    <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 mb-2 leading-tight">
+      See If You Qualify<br className="sm:hidden" />
+      <span className="whitespace-nowrap"> for $2,000 Off</span>
+    </h1>
+    <p className="text-sm sm:text-base font-medium text-slate-700">
+      Takes less than 30 seconds to complete
+    </p>
+  </>
+)}
 ```
 
-**Solution - Use smaller text on mobile and add controlled line break:**
+**New:**
 ```jsx
-<h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 mb-2 leading-tight">
-  See If You Qualify<br className="sm:hidden" />
-  <span className="whitespace-nowrap"> for $2,000 Off</span>
-</h1>
+{!quizStarted && (
+  <>
+    <p className="text-lg sm:text-xl md:text-2xl font-semibold text-slate-700 mb-1 leading-snug">
+      Ready to Transform Your Home?
+    </p>
+    <h1 className="text-base sm:text-lg md:text-xl font-bold text-slate-900 mb-2 leading-snug">
+      See If You Qualify for the{' '}
+      <span className="text-primary">Winter Upgrade Program</span>
+      <br className="sm:hidden" />
+      {' '}and Save Thousands
+    </h1>
+    <p className="text-sm sm:text-base font-medium text-slate-600">
+      Takes less than 30 seconds to complete
+    </p>
+  </>
+)}
 ```
 
-This approach:
-- Reduces base font size from `text-2xl` to `text-xl` on mobile
-- Adds `leading-tight` for better line spacing
-- Uses a hidden line break on mobile to control where the text wraps
-- Wraps "$2,000 Off" in `whitespace-nowrap` to keep the price and "Off" together
+**Key improvements:**
+- Engaging question as the lead-in (larger, lighter weight)
+- Main value prop with "Winter Upgrade Program" highlighted in amber
+- Controlled line break on mobile for natural reading
+- Lighter font weights throughout for cleaner mobile appearance
+- Better color hierarchy with `slate-700` for question, `slate-900` for main text
+
+---
+
+## Visual Result
+
+**Mobile view:**
+```text
+Ready to Transform Your Home?
+See If You Qualify for the
+Winter Upgrade Program
+and Save Thousands
+```
+
+**Desktop view:**
+```text
+Ready to Transform Your Home?
+See If You Qualify for the Winter Upgrade Program and Save Thousands
+```
 
 ---
 
@@ -66,6 +98,5 @@ This approach:
 
 | File | Change |
 |------|--------|
-| `src/components/FAQSection.tsx` | Update button text to "See If You Qualify" |
-| `src/pages/QualifyPage.tsx` | Improve headline sizing and structure for mobile |
+| `src/pages/QualifyPage.tsx` | Restructure headline with question + value prop, improve font styling, add amber highlight |
 
