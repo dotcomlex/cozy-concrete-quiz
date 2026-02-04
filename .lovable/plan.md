@@ -1,86 +1,64 @@
 
 
-# Update CTA Language to "Qualify" Messaging
+# Fix Missed CTA Button and Mobile Headline Sizing
 
 ## Summary
 
-Align all CTA buttons and the /qualify page headline with "qualify" language to match your successful Facebook lead form messaging. Keep the "Takes less than 30 seconds" subheadline.
+Fix two issues: (1) The FAQ section CTA button still says "Check Availability Now" - it was missed in the previous update, and (2) the /qualify page headline is wrapping awkwardly on mobile, creating a poor visual appearance.
 
 ---
 
-## Engaging Headline Options for /qualify Page
+## Issues Identified
 
-Instead of plain "Do You Qualify?", here are more engaging options:
-
-| Option | Why It Works |
-|--------|--------------|
-| **"See If You Qualify for $2,000 Off"** | Adds the benefit right in the headline - reminds them of the reward |
-| **"Could You Save $2,000 on Your Remodel?"** | Question format creates curiosity, benefit-focused |
-| **"Unlock Your $2,000 Savings"** | Gamification feel, action-oriented, assumes success |
-| **"Your $2,000 Discount Is Waiting"** | Creates urgency, assumes they'll get it |
-
-**Recommended**: "See If You Qualify for $2,000 Off" - keeps the qualify language consistent with your Facebook ads while adding the benefit.
+| Issue | Location | Problem |
+|-------|----------|---------|
+| Missed CTA update | `FAQSection.tsx` line 85 | Still shows "Check Availability Now" |
+| Headline wrapping | `QualifyPage.tsx` line 63-64 | "See If You Qualify for $2,000 Off" breaks awkwardly on small screens |
 
 ---
 
-## All CTA Changes
+## Solutions
 
-| Location | Current | New |
-|----------|---------|-----|
-| Hero button (`HeroSection.tsx`) | "Check Availability Now" | "See If You Qualify" |
-| Floating CTA (`FloatingCTA.tsx`) | "Claim $2,000 Discount" | "See If You Qualify" |
-| Gallery inline CTA | "Check Availability Now" | "See If You Qualify" |
-| Reviews inline CTA | "Check Availability Now" | "See If You Qualify" |
-| Final CTA section | Various | "See If You Qualify" |
-| /qualify page headline | "Check Availability" | "See If You Qualify for $2,000 Off" |
+### 1. Update FAQ Section CTA Button
 
----
+**File**: `src/components/FAQSection.tsx` (line 85)
 
-## Technical Implementation
+Change from:
+```jsx
+Check Availability Now
+```
 
-### File: `src/pages/QualifyPage.tsx` (lines 58-63)
+To:
+```jsx
+See If You Qualify
+```
+
+### 2. Fix Mobile Headline Sizing
+
+The current headline text is too long for mobile screens, causing an ugly wrap where "$2,000 Off" breaks to a second line awkwardly.
+
+**File**: `src/pages/QualifyPage.tsx` (lines 63-65)
 
 **Current:**
 ```jsx
 <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
-  Check Availability
-</h1>
-<p className="text-sm sm:text-base font-medium text-slate-700">
-  Takes less than 30 seconds to complete
-</p>
-```
-
-**New:**
-```jsx
-<h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
   See If You Qualify for $2,000 Off
 </h1>
-<p className="text-sm sm:text-base font-medium text-slate-700">
-  Takes less than 30 seconds to complete
-</p>
 ```
 
-### File: `src/components/HeroSection.tsx` (line 72)
+**Solution - Use smaller text on mobile and add controlled line break:**
+```jsx
+<h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 mb-2 leading-tight">
+  See If You Qualify<br className="sm:hidden" />
+  <span className="whitespace-nowrap"> for $2,000 Off</span>
+</h1>
+```
 
-**Current:** `Check Availability Now`
-**New:** `See If You Qualify`
-
-### File: `src/components/FloatingCTA.tsx` (line 28)
-
-**Current:** `Claim $2,000 Discount`
-**New:** `See If You Qualify`
-
-### File: `src/components/GallerySection.tsx`
-
-Update inline CTA button text to "See If You Qualify"
-
-### File: `src/components/ReviewsSection.tsx`
-
-Update inline CTA button text to "See If You Qualify"
-
-### File: `src/components/FinalCTASection.tsx`
-
-Update CTA button text to "See If You Qualify"
+This approach:
+- Reduces base font size from `text-2xl` to `text-xl` on mobile
+- Adds `leading-tight` for better line spacing
+- Uses a hidden line break on mobile to control where the text wraps
+- Wraps "$2,000 Off" in `whitespace-nowrap` to keep the price and "Off" together
 
 ---
 
@@ -88,10 +66,6 @@ Update CTA button text to "See If You Qualify"
 
 | File | Change |
 |------|--------|
-| `src/pages/QualifyPage.tsx` | Update headline to "See If You Qualify for $2,000 Off" |
-| `src/components/HeroSection.tsx` | Update button to "See If You Qualify" |
-| `src/components/FloatingCTA.tsx` | Update button to "See If You Qualify" |
-| `src/components/GallerySection.tsx` | Update inline CTA button |
-| `src/components/ReviewsSection.tsx` | Update inline CTA button |
-| `src/components/FinalCTASection.tsx` | Update CTA button |
+| `src/components/FAQSection.tsx` | Update button text to "See If You Qualify" |
+| `src/pages/QualifyPage.tsx` | Improve headline sizing and structure for mobile |
 
