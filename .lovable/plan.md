@@ -1,58 +1,97 @@
 
 
-# Update Hero Section Copy
+# Update CTA Language to "Qualify" Messaging
 
 ## Summary
 
-Update the headline and subheadline text in the hero section with the new copy you provided.
+Align all CTA buttons and the /qualify page headline with "qualify" language to match your successful Facebook lead form messaging. Keep the "Takes less than 30 seconds" subheadline.
 
 ---
 
-## Text Changes
+## Engaging Headline Options for /qualify Page
 
-| Element | Current | New |
-|---------|---------|-----|
-| Headline | "...Save $2,000 On Their **Bath & Kitchen Remodel**" | "...Save $2,000 On Their **Remodel**" |
-| Subheadline | "...$2,000 off your **project**." | "...$2,000 off your **kitchen or bathroom remodel**." |
+Instead of plain "Do You Qualify?", here are more engaging options:
+
+| Option | Why It Works |
+|--------|--------------|
+| **"See If You Qualify for $2,000 Off"** | Adds the benefit right in the headline - reminds them of the reward |
+| **"Could You Save $2,000 on Your Remodel?"** | Question format creates curiosity, benefit-focused |
+| **"Unlock Your $2,000 Savings"** | Gamification feel, action-oriented, assumes success |
+| **"Your $2,000 Discount Is Waiting"** | Creates urgency, assumes they'll get it |
+
+**Recommended**: "See If You Qualify for $2,000 Off" - keeps the qualify language consistent with your Facebook ads while adding the benefit.
 
 ---
 
-## Technical Details
+## All CTA Changes
 
-### File: `src/components/HeroSection.tsx`
+| Location | Current | New |
+|----------|---------|-----|
+| Hero button (`HeroSection.tsx`) | "Check Availability Now" | "See If You Qualify" |
+| Floating CTA (`FloatingCTA.tsx`) | "Claim $2,000 Discount" | "See If You Qualify" |
+| Gallery inline CTA | "Check Availability Now" | "See If You Qualify" |
+| Reviews inline CTA | "Check Availability Now" | "See If You Qualify" |
+| Final CTA section | Various | "See If You Qualify" |
+| /qualify page headline | "Check Availability" | "See If You Qualify for $2,000 Off" |
 
-**Change 1: Headline (lines 49-52)**
+---
 
-Update from:
+## Technical Implementation
+
+### File: `src/pages/QualifyPage.tsx` (lines 58-63)
+
+**Current:**
 ```jsx
-This New Winter Upgrade Program Is Helping Colorado Homeowners Save{" "}
-<span className="text-highlight">$2,000</span> On Their Bath & Kitchen Remodel
+<h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
+  Check Availability
+</h1>
+<p className="text-sm sm:text-base font-medium text-slate-700">
+  Takes less than 30 seconds to complete
+</p>
 ```
 
-To:
+**New:**
 ```jsx
-This New Winter Upgrade Program Is Helping Colorado Homeowners Save{" "}
-<span className="text-highlight">$2,000</span> On Their Remodel
+<h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
+  See If You Qualify for $2,000 Off
+</h1>
+<p className="text-sm sm:text-base font-medium text-slate-700">
+  Takes less than 30 seconds to complete
+</p>
 ```
 
-**Change 2: Subheadline (lines 54-56)**
+### File: `src/components/HeroSection.tsx` (line 72)
 
-Update from:
-```jsx
-Limited spots available. Click below to see if you qualify for a free consultation and $2,000 off your project.
-```
+**Current:** `Check Availability Now`
+**New:** `See If You Qualify`
 
-To:
-```jsx
-Limited spots available. Click below to see if you qualify for a free consultation and $2,000 off your kitchen or bathroom remodel.
-```
+### File: `src/components/FloatingCTA.tsx` (line 28)
+
+**Current:** `Claim $2,000 Discount`
+**New:** `See If You Qualify`
+
+### File: `src/components/GallerySection.tsx`
+
+Update inline CTA button text to "See If You Qualify"
+
+### File: `src/components/ReviewsSection.tsx`
+
+Update inline CTA button text to "See If You Qualify"
+
+### File: `src/components/FinalCTASection.tsx`
+
+Update CTA button text to "See If You Qualify"
 
 ---
 
 ## Files Modified
 
-| File | Lines | Change |
-|------|-------|--------|
-| `src/components/HeroSection.tsx` | 49-52 | Simplify headline to "On Their Remodel" |
-| `src/components/HeroSection.tsx` | 54-56 | Update subheadline to specify "kitchen or bathroom remodel" |
+| File | Change |
+|------|--------|
+| `src/pages/QualifyPage.tsx` | Update headline to "See If You Qualify for $2,000 Off" |
+| `src/components/HeroSection.tsx` | Update button to "See If You Qualify" |
+| `src/components/FloatingCTA.tsx` | Update button to "See If You Qualify" |
+| `src/components/GallerySection.tsx` | Update inline CTA button |
+| `src/components/ReviewsSection.tsx` | Update inline CTA button |
+| `src/components/FinalCTASection.tsx` | Update CTA button |
 
