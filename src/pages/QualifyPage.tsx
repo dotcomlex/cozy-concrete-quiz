@@ -60,8 +60,9 @@ const [quizStarted, setQuizStarted] = useState(false);
               {/* Header - HIDES when quiz starts */}
               {!quizStarted && (
                 <>
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">
-                    See If You Qualify for $2,000 Off
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 mb-2 leading-tight">
+                    See If You Qualify<br className="sm:hidden" />
+                    <span className="whitespace-nowrap"> for $2,000 Off</span>
                   </h1>
                   <p className="text-sm sm:text-base font-medium text-slate-700">
                     Takes less than 30 seconds to complete
